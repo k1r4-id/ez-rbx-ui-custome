@@ -90,9 +90,9 @@ function Window:CreateFloatingButton(screenGui, frame, toggleMinimizeCallback, a
 	floatingButton.Active = true
 	floatingButton.Parent = screenGui
 	
-	-- Rounded corners for floating button - TUMPUL
+	-- Rounded corners for floating button - TUMPUL (consistent with main window)
 	local floatingCorner = Instance.new("UICorner")
-	floatingCorner.CornerRadius = UDim.new(0, 16) -- Lebih tumpul/rounded
+	floatingCorner.CornerRadius = UDim.new(0, 24) -- Lebih tumpul/rounded (updated to 24 for consistency)
 	floatingCorner.Parent = floatingButton
 	
 	-- Biohazard icon ☣
@@ -128,7 +128,7 @@ function Window:CreateFloatingButton(screenGui, frame, toggleMinimizeCallback, a
 	floatingShadow.Parent = floatingButton
 	
 	local shadowCorner = Instance.new("UICorner")
-	shadowCorner.CornerRadius = UDim.new(0, 16) -- Lebih tumpul/rounded
+	shadowCorner.CornerRadius = UDim.new(0, 24) -- Lebih tumpul/rounded (updated to 24 for consistency)
 	shadowCorner.Parent = floatingShadow
 	
 	-- Hover effects for floating button
@@ -476,10 +476,25 @@ function Window:Create(config)
 	frame.Visible = autoShow
 	frame.Parent = screenGui
 
-	-- Rounded corners - TUMPUL/MEMBULAT (larger radius)
+	-- Rounded corners - VERY ROUNDED (like Speed Hub X)
 	local frameCorner = Instance.new("UICorner")
-	frameCorner.CornerRadius = UDim.new(0, 16) -- Lebih tumpul/rounded
+	frameCorner.CornerRadius = UDim.new(0, 32) -- Much rounder for Speed Hub X style (increased from 24 to 32)
 	frameCorner.Parent = frame
+
+	-- Window shadow (UMBRELLA CORP: Subtle black shadow, rounded corners)
+	local frameShadow = Instance.new("Frame")
+	frameShadow.Size = UDim2.new(1, 8, 1, 8)
+	frameShadow.Position = UDim2.new(0, -4, 0, 4)
+	frameShadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	frameShadow.BackgroundTransparency = 0.7
+	frameShadow.BorderSizePixel = 0
+	frameShadow.ZIndex = frame.ZIndex - 1
+	frameShadow.Parent = frame
+
+	-- Rounded corners for shadow - match frame corner radius
+	local frameShadowCorner = Instance.new("UICorner")
+	frameShadowCorner.CornerRadius = UDim.new(0, 32)
+	frameShadowCorner.Parent = frameShadow
 
 	-- Title bar - Slightly transparent
 	local titleBar = Instance.new("Frame")
@@ -491,10 +506,18 @@ function Window:Create(config)
 	titleBar.ZIndex = 2
 	titleBar.Parent = frame
 
-	-- Title bar rounded corners (match main frame)
-	local titleCorner = Instance.new("UICorner")
-	titleCorner.CornerRadius = UDim.new(0, 16) -- Same as main frame
-	titleCorner.Parent = titleBar
+	-- Title bar NO rounded corners - main frame will clip it naturally at top for seamless connection
+	-- Bottom stays square to merge perfectly with body
+
+	-- Separator line between title bar and body (like Speed Hub X)
+	local titleSeparator = Instance.new("Frame")
+	titleSeparator.Size = UDim2.new(1, 0, 0, 1) -- 1px height
+	titleSeparator.Position = UDim2.new(0, 0, 1, -1) -- Bottom of title bar
+	titleSeparator.BackgroundColor3 = Color3.fromRGB(60, 60, 70) -- Subtle separator
+	titleSeparator.BackgroundTransparency = 0.3
+	titleSeparator.BorderSizePixel = 0
+	titleSeparator.ZIndex = 3
+	titleSeparator.Parent = titleBar
 
 	-- Title text - UMBRELLA RED color
 	local titleLabel = Instance.new("TextLabel")
@@ -697,10 +720,8 @@ function Window:Create(config)
 	tabPanel.ZIndex = 2
 	tabPanel.Parent = frame
 
-	-- Tab panel rounded corner (bottom-left)
-	local tabPanelCorner = Instance.new("UICorner")
-	tabPanelCorner.CornerRadius = UDim.new(0, 16) -- Match main frame
-	tabPanelCorner.Parent = tabPanel
+	-- Tab panel NO rounded corners - main frame will clip it naturally for seamless appearance
+	-- Stays square to merge perfectly with title bar and body
 
 	-- Tab panel padding
 	local tabPadding = Instance.new("UIPadding")
@@ -741,10 +762,8 @@ function Window:Create(config)
 	scrollFrame.ZIndex = 2
 	scrollFrame.Parent = frame
 
-	-- Content scroll frame rounded corner (bottom-right)
-	local scrollCorner = Instance.new("UICorner")
-	scrollCorner.CornerRadius = UDim.new(0, 16) -- Match main frame
-	scrollCorner.Parent = scrollFrame
+	-- ScrollFrame NO rounded corners - main frame will clip it naturally for seamless appearance
+	-- Stays square to merge perfectly with title bar and tab panel
 
 	-- Function to update canvas size (USING OLD UI.LUA LOGIC - Line ~692)
 	local updateCanvasSize  -- Forward declaration

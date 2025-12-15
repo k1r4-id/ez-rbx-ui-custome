@@ -94,10 +94,10 @@ function Tab:Create(config)
 
 	-- No glow animation for cleaner SpeedHub look
 
-	-- Icon label (SpeedHub style: left side with icon)
+	-- Icon label (SpeedHub style: left side with icon, compact spacing)
 	local iconLabel = Instance.new("TextLabel")
-	iconLabel.Size = UDim2.new(0, 28, 1, 0)
-	iconLabel.Position = UDim2.new(0, 14, 0, 0)
+	iconLabel.Size = UDim2.new(0, 24, 1, 0) -- Slightly smaller for compact look
+	iconLabel.Position = UDim2.new(0, 12, 0, 0) -- Closer to left edge
 	iconLabel.BackgroundTransparency = 1
 	iconLabel.Text = tabIcon or ""
 	iconLabel.TextColor3 = SH_TextLight -- Light text
@@ -121,10 +121,10 @@ function Tab:Create(config)
 	-- Function to update title alignment based on icon presence
 	local function updateTitleAlignment()
 		if tabIcon and tabIcon ~= "" then
-			-- Icon on left, title on right
-			titleLabel.Size = UDim2.new(1, -45, 1, 0)
-			titleLabel.Position = UDim2.new(0, 38, 0, 0)
-			titleLabel.TextXAlignment = Enum.TextXAlignment.Right
+			-- Icon on left, title on right (compact spacing like Speed Hub X)
+			titleLabel.Size = UDim2.new(1, -48, 1, 0)
+			titleLabel.Position = UDim2.new(0, 40, 0, 0) -- Closer to icon (was 38, now 40 but with LEFT align)
+			titleLabel.TextXAlignment = Enum.TextXAlignment.Left -- Changed from Right to Left for compact look
 			iconLabel.Visible = true
 		else
 			-- No icon, title centered

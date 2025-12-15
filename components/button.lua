@@ -182,16 +182,20 @@ function Button:Create(config)
 			buttonBorder.Parent = button
 		end
 
-		-- Shadow (UMBRELLA CORP: Black, transparency 0.7, 1px)
-		local buttonShadow = Instance.new("ImageLabel")
+		-- Shadow (UMBRELLA CORP: Black, transparency 0.7, rounded corners)
+		local buttonShadow = Instance.new("Frame")
 		buttonShadow.Size = UDim2.new(1, 2, 1, 2)
 		buttonShadow.Position = UDim2.new(0, -1, 0, 1)
-		buttonShadow.BackgroundTransparency = 1
-		buttonShadow.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
-		buttonShadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
-		buttonShadow.ImageTransparency = 0.7
+		buttonShadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		buttonShadow.BackgroundTransparency = 0.7
+		buttonShadow.BorderSizePixel = 0
 		buttonShadow.ZIndex = button.ZIndex - 1
 		buttonShadow.Parent = button
+
+		-- Rounded corners for shadow - match button corner radius
+		local shadowCorner = Instance.new("UICorner")
+		shadowCorner.CornerRadius = UDim.new(0, 6)
+		shadowCorner.Parent = buttonShadow
 	end
 	button.BackgroundColor3 = variantColors.background
 	button.Text = text
