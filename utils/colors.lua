@@ -1,10 +1,15 @@
 --[[
-	EzUI Color Palette Module
-	Dark Mode Color Scheme for Roblox GUI
-	
+	EzUI Color Palette Module - UMBRELLA CORPORATION THEME
+	Pharmaceutical Corporation with High-Tech Medical Aesthetic
+
 	Author: EzUI Library
-	Version: 1.0.0
-	
+	Version: 2.0.0 - Ultimate Umbrella Corp Edition
+
+	Theme Identity:
+	- Primary: Umbrella Crimson Red (Signature)
+	- Style: Corporate pharmaceutical with medical precision
+	- Mood: Professional, powerful, slightly sinister
+
 	Usage:
 		local m = require(path.to.color)
 		myFrame.BackgroundColor3 = Colors.Background.Primary
@@ -14,214 +19,237 @@
 local Colors = {}
 
 -- ============================================
--- BACKGROUND COLORS
+-- UMBRELLA CORPORATION SIGNATURE COLORS
+-- ============================================
+Colors.Umbrella = {
+	Red = Color3.fromRGB(220, 20, 60),          -- Crimson signature
+	RedBright = Color3.fromRGB(240, 30, 70),    -- Hover/emphasis
+	RedDark = Color3.fromRGB(180, 15, 50),      -- Darker variant
+	CorporateWhite = Color3.fromRGB(245, 245, 250), -- Clean medical white
+	CorporateBlack = Color3.fromRGB(18, 18, 22),    -- Professional depth
+}
+
+-- ============================================
+-- BACKGROUND COLORS (Corporate Dark)
 -- ============================================
 Colors.Background = {
-	Primary = Color3.fromRGB(30, 30, 35),      -- Main background
-	Secondary = Color3.fromRGB(40, 40, 45),    -- Secondary panels
-	Tertiary = Color3.fromRGB(50, 50, 55),     -- Elevated elements
-	Overlay = Color3.fromRGB(20, 20, 25),      -- Modal overlays
+	Primary = Color3.fromRGB(18, 18, 22),      -- Main background (corporate black)
+	Secondary = Color3.fromRGB(25, 25, 30),    -- Secondary panels (dark panel)
+	Tertiary = Color3.fromRGB(32, 32, 38),     -- Elevated elements
+	Overlay = Color3.fromRGB(0, 0, 0),         -- Modal overlays (use with transparency)
 	Transparent = Color3.fromRGB(0, 0, 0),     -- For transparent elements
 }
 
 -- ============================================
--- SURFACE COLORS (Components)
+-- SURFACE COLORS (Professional Panels)
 -- ============================================
 Colors.Surface = {
-	Default = Color3.fromRGB(45, 45, 50),      -- Default surface
-	Elevated = Color3.fromRGB(55, 55, 60),     -- Elevated surface
-	Hover = Color3.fromRGB(60, 60, 65),        -- Hover state
-	Active = Color3.fromRGB(65, 65, 70),       -- Active/Pressed state
-	Disabled = Color3.fromRGB(35, 35, 40),     -- Disabled state
+	Default = Color3.fromRGB(25, 25, 30),      -- Default surface (dark panel)
+	Elevated = Color3.fromRGB(32, 32, 38),     -- Elevated surface
+	Hover = Color3.fromRGB(38, 38, 45),        -- Hover state
+	Active = Color3.fromRGB(40, 40, 48),       -- Active/Pressed state
+	Disabled = Color3.fromRGB(20, 20, 25),     -- Disabled state
 }
 
 -- ============================================
--- TEXT COLORS
+-- TEXT COLORS (Corporate Hierarchy)
 -- ============================================
 Colors.Text = {
-	Primary = Color3.fromRGB(255, 255, 255),   -- Primary text (high contrast)
-	Secondary = Color3.fromRGB(200, 200, 205), -- Secondary text (medium contrast)
-	Tertiary = Color3.fromRGB(150, 150, 155),  -- Tertiary text (low contrast)
-	Disabled = Color3.fromRGB(100, 100, 105),  -- Disabled text
-	Placeholder = Color3.fromRGB(120, 120, 125), -- Placeholder text
-	Link = Color3.fromRGB(100, 150, 255),      -- Link text
-	LinkHover = Color3.fromRGB(120, 170, 255), -- Link hover
+	Primary = Color3.fromRGB(245, 245, 250),   -- Primary text (corporate white)
+	Secondary = Color3.fromRGB(200, 200, 210), -- Secondary text
+	Tertiary = Color3.fromRGB(150, 150, 160),  -- Tertiary text (gray)
+	Disabled = Color3.fromRGB(100, 100, 110),  -- Disabled text
+	Placeholder = Color3.fromRGB(120, 120, 130), -- Placeholder text
+	Link = Color3.fromRGB(220, 20, 60),        -- Link text (Umbrella Red)
+	LinkHover = Color3.fromRGB(240, 30, 70),   -- Link hover (brighter red)
 }
 
 -- ============================================
--- BORDER COLORS
+-- BORDER COLORS (Subtle & Professional)
 -- ============================================
 Colors.Border = {
-	Default = Color3.fromRGB(80, 80, 85),      -- Default border
-	Light = Color3.fromRGB(100, 100, 105),     -- Light border
-	Dark = Color3.fromRGB(60, 60, 65),         -- Dark border
-	Focus = Color3.fromRGB(100, 150, 255),     -- Focused border
-	Error = Color3.fromRGB(255, 100, 100),     -- Error border
-	Success = Color3.fromRGB(100, 255, 150),   -- Success border
+	Default = Color3.fromRGB(40, 40, 48),      -- Default border (subtle)
+	Light = Color3.fromRGB(50, 50, 58),        -- Light border
+	Dark = Color3.fromRGB(30, 30, 35),         -- Dark border
+	Focus = Color3.fromRGB(220, 20, 60),       -- Focused border (Umbrella Red)
+	Error = Color3.fromRGB(220, 20, 60),       -- Error border (same as red)
+	Success = Color3.fromRGB(80, 200, 120),    -- Success border (medical green)
 }
 
 -- ============================================
--- BUTTON COLORS
+-- BUTTON COLORS (Premium Corporate)
 -- ============================================
 Colors.Button = {
-	-- Primary Button
-	Primary = Color3.fromRGB(100, 150, 255),
-	PrimaryHover = Color3.fromRGB(120, 170, 255),
-	PrimaryActive = Color3.fromRGB(80, 130, 235),
-	PrimaryDisabled = Color3.fromRGB(60, 90, 150),
-	
-	-- Secondary Button
-	Secondary = Color3.fromRGB(80, 80, 90),
-	SecondaryHover = Color3.fromRGB(100, 100, 110),
-	SecondaryActive = Color3.fromRGB(70, 70, 80),
-	SecondaryDisabled = Color3.fromRGB(50, 50, 60),
-	
-	-- Success Button
-	Success = Color3.fromRGB(76, 175, 80),
-	SuccessHover = Color3.fromRGB(96, 195, 100),
-	SuccessActive = Color3.fromRGB(56, 155, 60),
-	SuccessDisabled = Color3.fromRGB(46, 115, 50),
-	
-	-- Danger Button
-	Danger = Color3.fromRGB(244, 67, 54),
-	DangerHover = Color3.fromRGB(255, 87, 74),
-	DangerActive = Color3.fromRGB(224, 47, 34),
-	DangerDisabled = Color3.fromRGB(150, 40, 35),
-	
-	-- Warning Button
-	Warning = Color3.fromRGB(255, 193, 7),
-	WarningHover = Color3.fromRGB(255, 213, 27),
-	WarningActive = Color3.fromRGB(235, 173, 0),
-	WarningDisabled = Color3.fromRGB(150, 120, 10),
+	-- Primary Button (UMBRELLA RED!)
+	Primary = Color3.fromRGB(220, 20, 60),
+	PrimaryHover = Color3.fromRGB(240, 30, 70),
+	PrimaryActive = Color3.fromRGB(200, 15, 50),
+	PrimaryDisabled = Color3.fromRGB(110, 10, 30),
+
+	-- Secondary Button (Dark with Red Border)
+	Secondary = Color3.fromRGB(25, 25, 30),
+	SecondaryHover = Color3.fromRGB(32, 32, 38),
+	SecondaryActive = Color3.fromRGB(20, 20, 25),
+	SecondaryDisabled = Color3.fromRGB(18, 18, 22),
+
+	-- Success Button (Medical Green)
+	Success = Color3.fromRGB(80, 200, 120),
+	SuccessHover = Color3.fromRGB(90, 220, 135),
+	SuccessActive = Color3.fromRGB(70, 180, 105),
+	SuccessDisabled = Color3.fromRGB(40, 100, 60),
+
+	-- Danger Button (Umbrella Red)
+	Danger = Color3.fromRGB(220, 20, 60),
+	DangerHover = Color3.fromRGB(240, 30, 70),
+	DangerActive = Color3.fromRGB(200, 15, 50),
+	DangerDisabled = Color3.fromRGB(110, 10, 30),
+
+	-- Warning Button (Medical Amber)
+	Warning = Color3.fromRGB(255, 160, 0),
+	WarningHover = Color3.fromRGB(255, 180, 30),
+	WarningActive = Color3.fromRGB(235, 140, 0),
+	WarningDisabled = Color3.fromRGB(130, 80, 0),
 }
 
 -- ============================================
--- INPUT COLORS (TextBox, SelectBox, etc)
+-- INPUT COLORS (User-Friendly)
 -- ============================================
 Colors.Input = {
-	Background = Color3.fromRGB(60, 60, 65),
-	BackgroundHover = Color3.fromRGB(70, 70, 75),
-	BackgroundFocus = Color3.fromRGB(65, 65, 70),
-	BackgroundDisabled = Color3.fromRGB(45, 45, 50),
-	Border = Color3.fromRGB(100, 100, 105),
-	BorderFocus = Color3.fromRGB(100, 150, 255),
-	BorderError = Color3.fromRGB(255, 100, 100),
-	Text = Color3.fromRGB(255, 255, 255),
-	Placeholder = Color3.fromRGB(150, 150, 155),
+	Background = Color3.fromRGB(25, 25, 30),   -- Dark panel
+	BackgroundHover = Color3.fromRGB(28, 28, 33),
+	BackgroundFocus = Color3.fromRGB(30, 30, 35),
+	BackgroundDisabled = Color3.fromRGB(20, 20, 25),
+	Border = Color3.fromRGB(60, 60, 68),       -- Gray border (0.6 transparency)
+	BorderFocus = Color3.fromRGB(220, 20, 60), -- Umbrella Red on focus!
+	BorderError = Color3.fromRGB(220, 20, 60), -- Red for errors
+	Text = Color3.fromRGB(245, 245, 250),      -- Corporate white
+	Placeholder = Color3.fromRGB(120, 120, 130), -- Gray placeholder
 }
 
 -- ============================================
--- TOGGLE/SWITCH COLORS
+-- TOGGLE/SWITCH COLORS (Satisfying!)
 -- ============================================
 Colors.Toggle = {
-	On = Color3.fromRGB(76, 175, 80),
-	Off = Color3.fromRGB(100, 100, 100),
-	Handle = Color3.fromRGB(255, 255, 255),
-	Disabled = Color3.fromRGB(70, 70, 75),
+	On = Color3.fromRGB(220, 20, 60),          -- Umbrella Red when ON!
+	Off = Color3.fromRGB(60, 60, 68),          -- Dark gray when OFF
+	Handle = Color3.fromRGB(245, 245, 250),    -- White circle handle
+	Disabled = Color3.fromRGB(40, 40, 48),     -- Disabled state
 }
 
 -- ============================================
 -- SLIDER COLORS
 -- ============================================
 Colors.Slider = {
-	Track = Color3.fromRGB(80, 80, 85),
-	TrackFilled = Color3.fromRGB(100, 150, 255),
-	Handle = Color3.fromRGB(255, 255, 255),
-	HandleHover = Color3.fromRGB(245, 245, 245),
-	HandleActive = Color3.fromRGB(230, 230, 230),
-	HandleDisabled = Color3.fromRGB(150, 150, 155),
+	Track = Color3.fromRGB(40, 40, 48),        -- Dark track
+	TrackFilled = Color3.fromRGB(220, 20, 60), -- Red filled portion
+	Handle = Color3.fromRGB(245, 245, 250),    -- White handle
+	HandleHover = Color3.fromRGB(240, 30, 70), -- Red glow on hover
+	HandleActive = Color3.fromRGB(220, 20, 60),
+	HandleDisabled = Color3.fromRGB(100, 100, 110),
 }
 
 -- ============================================
--- DROPDOWN COLORS
+-- DROPDOWN COLORS (Clean & Modern)
 -- ============================================
 Colors.Dropdown = {
-	Background = Color3.fromRGB(45, 45, 50),
-	Option = Color3.fromRGB(50, 50, 55),
-	OptionHover = Color3.fromRGB(70, 70, 75),
-	OptionSelected = Color3.fromRGB(70, 120, 70),
-	OptionActive = Color3.fromRGB(100, 150, 255),
-	Border = Color3.fromRGB(150, 150, 155),
-	Arrow = Color3.fromRGB(200, 200, 205),
+	Background = Color3.fromRGB(25, 25, 30),
+	Option = Color3.fromRGB(25, 25, 30),
+	OptionHover = Color3.fromRGB(32, 32, 38),
+	OptionSelected = Color3.fromRGB(32, 32, 38),
+	OptionActive = Color3.fromRGB(220, 20, 60), -- Red for active
+	Border = Color3.fromRGB(60, 60, 68),
+	Arrow = Color3.fromRGB(200, 200, 210),
 }
 
 -- ============================================
--- SCROLLBAR COLORS
+-- SCROLLBAR COLORS (Subtle)
 -- ============================================
 Colors.Scrollbar = {
-	Background = Color3.fromRGB(40, 40, 45),
-	Thumb = Color3.fromRGB(120, 120, 125),
-	ThumbHover = Color3.fromRGB(140, 140, 145),
-	ThumbActive = Color3.fromRGB(160, 160, 165),
+	Background = Color3.fromRGB(18, 18, 22),
+	Thumb = Color3.fromRGB(80, 80, 90),
+	ThumbHover = Color3.fromRGB(100, 100, 110),
+	ThumbActive = Color3.fromRGB(120, 120, 130),
 }
 
 -- ============================================
--- STATUS COLORS (Semantic m)
+-- STATUS COLORS (Medical/Laboratory Theme)
 -- ============================================
 Colors.Status = {
-	Success = Color3.fromRGB(76, 175, 80),
-	Warning = Color3.fromRGB(255, 193, 7),
-	Error = Color3.fromRGB(244, 67, 54),
-	Info = Color3.fromRGB(33, 150, 243),
+	Success = Color3.fromRGB(80, 200, 120),    -- Medical green (ECG monitor)
+	Warning = Color3.fromRGB(255, 160, 0),     -- Medical amber
+	Error = Color3.fromRGB(220, 20, 60),       -- Umbrella Red
+	Info = Color3.fromRGB(100, 150, 255),      -- Medical blue
 }
 
 -- ============================================
--- ACCENT COLORS
+-- ACCENT COLORS (Umbrella Signature)
 -- ============================================
 Colors.Accent = {
-	Primary = Color3.fromRGB(100, 150, 255),   -- Blue
-	Secondary = Color3.fromRGB(156, 39, 176),  -- Purple
-	Success = Color3.fromRGB(76, 175, 80),     -- Green
-	Warning = Color3.fromRGB(255, 193, 7),     -- Yellow
-	Danger = Color3.fromRGB(244, 67, 54),      -- Red
-	Info = Color3.fromRGB(33, 150, 243),       -- Light Blue
+	Primary = Color3.fromRGB(220, 20, 60),     -- Umbrella Red
+	Secondary = Color3.fromRGB(180, 15, 50),   -- Darker red
+	Success = Color3.fromRGB(80, 200, 120),    -- Medical green
+	Warning = Color3.fromRGB(255, 160, 0),     -- Medical amber
+	Danger = Color3.fromRGB(220, 20, 60),      -- Umbrella Red
+	Info = Color3.fromRGB(100, 150, 255),      -- Medical blue
+	Hover = Color3.fromRGB(240, 30, 70),       -- Brighter red for hover
 }
 
 -- ============================================
--- SPECIAL COLORS
+-- SPECIAL COLORS (Effects & Glows)
 -- ============================================
 Colors.Special = {
 	Shadow = Color3.fromRGB(0, 0, 0),          -- For shadows
-	Highlight = Color3.fromRGB(255, 255, 255), -- For highlights
-	Overlay = Color3.fromRGB(0, 0, 0),         -- For modal overlays (use with transparency)
-	Divider = Color3.fromRGB(80, 80, 85),      -- For separators/dividers
+	Highlight = Color3.fromRGB(245, 245, 250), -- Corporate white highlights
+	Overlay = Color3.fromRGB(0, 0, 0),         -- Modal overlays (use with transparency)
+	Divider = Color3.fromRGB(40, 40, 48),      -- Separators/dividers
+
+	-- Glow colors (use with transparency!)
+	RedGlowSubtle = Color3.fromRGB(220, 20, 60),   -- Base: 0.7-0.9 transparency
+	RedGlowBright = Color3.fromRGB(240, 30, 70),   -- Active: 0.4-0.6 transparency
+	GreenGlow = Color3.fromRGB(80, 200, 120),      -- Success glow
+	AmberGlow = Color3.fromRGB(255, 160, 0),       -- Warning glow
+	BlueGlow = Color3.fromRGB(100, 150, 255),      -- Info glow
 }
 
 -- ============================================
--- TAB COLORS
+-- TAB COLORS (Clean Navigation)
 -- ============================================
 Colors.Tab = {
-	Background = Color3.fromRGB(50, 50, 50),
-	BackgroundHover = Color3.fromRGB(60, 60, 60),
-	BackgroundActive = Color3.fromRGB(70, 70, 75),
-	Text = Color3.fromRGB(255, 255, 255),
-	TextInactive = Color3.fromRGB(180, 180, 185),
-	Indicator = Color3.fromRGB(100, 150, 255),
+	Background = Color3.fromRGB(25, 25, 30),
+	BackgroundHover = Color3.fromRGB(28, 28, 33),
+	BackgroundActive = Color3.fromRGB(32, 32, 38), -- Subtle lift when active
+	Text = Color3.fromRGB(245, 245, 250),
+	TextInactive = Color3.fromRGB(150, 150, 160),
+	Indicator = Color3.fromRGB(220, 20, 60),       -- Red active indicator!
 }
 
 -- ============================================
--- NOTIFICATION COLORS
+-- NOTIFICATION COLORS (Medical Alert Style)
 -- ============================================
 Colors.Notification = {
 	Success = {
-		Background = Color3.fromRGB(46, 125, 50),
-		Text = Color3.fromRGB(255, 255, 255),
-		Border = Color3.fromRGB(76, 175, 80),
+		Background = Color3.fromRGB(25, 25, 30),   -- Dark background
+		Text = Color3.fromRGB(245, 245, 250),
+		Border = Color3.fromRGB(80, 200, 120),     -- Medical green border
+		Accent = Color3.fromRGB(80, 200, 120),
 	},
 	Warning = {
-		Background = Color3.fromRGB(245, 127, 23),
-		Text = Color3.fromRGB(255, 255, 255),
-		Border = Color3.fromRGB(255, 193, 7),
+		Background = Color3.fromRGB(25, 25, 30),
+		Text = Color3.fromRGB(245, 245, 250),
+		Border = Color3.fromRGB(255, 160, 0),      -- Medical amber border
+		Accent = Color3.fromRGB(255, 160, 0),
 	},
 	Error = {
-		Background = Color3.fromRGB(211, 47, 47),
-		Text = Color3.fromRGB(255, 255, 255),
-		Border = Color3.fromRGB(244, 67, 54),
+		Background = Color3.fromRGB(25, 25, 30),
+		Text = Color3.fromRGB(245, 245, 250),
+		Border = Color3.fromRGB(220, 20, 60),      -- Umbrella Red border
+		Accent = Color3.fromRGB(220, 20, 60),
 	},
 	Info = {
-		Background = Color3.fromRGB(25, 118, 210),
-		Text = Color3.fromRGB(255, 255, 255),
-		Border = Color3.fromRGB(33, 150, 243),
+		Background = Color3.fromRGB(25, 25, 30),
+		Text = Color3.fromRGB(245, 245, 250),
+		Border = Color3.fromRGB(100, 150, 255),    -- Medical blue border
+		Accent = Color3.fromRGB(100, 150, 255),
 	},
 }
 
@@ -297,7 +325,7 @@ function Colors:CreateGradient(startColor, endColor, steps)
 	local gradient = {}
 	for i = 0, steps - 1 do
 		local ratio = i / (steps - 1)
-		table.insert(gradient, Colors.Mix(startColor, endColor, ratio))
+		table.insert(gradient, self:Mix(startColor, endColor, ratio))
 	end
 	return gradient
 end
@@ -306,49 +334,34 @@ end
 -- PRESET THEMES
 -- ============================================
 Colors.Themes = {
-	-- Default Dark Theme (already defined above)
-	Dark = {
-		Name = "Dark",
-		Primary = Color3.fromRGB(100, 150, 255),
-		Background = Color3.fromRGB(30, 30, 35),
-		Surface = Color3.fromRGB(45, 45, 50),
-		Text = Color3.fromRGB(255, 255, 255),
-	},
-	
-	-- Darker Theme
-	Darker = {
-		Name = "Darker",
-		Primary = Color3.fromRGB(100, 150, 255),
-		Background = Color3.fromRGB(15, 15, 20),
+	-- Umbrella Corporation Theme (Default)
+	UmbrellaCorp = {
+		Name = "Umbrella Corporation",
+		Primary = Color3.fromRGB(220, 20, 60),
+		Background = Color3.fromRGB(18, 18, 22),
 		Surface = Color3.fromRGB(25, 25, 30),
-		Text = Color3.fromRGB(255, 255, 255),
+		Text = Color3.fromRGB(245, 245, 250),
+		Accent = Color3.fromRGB(220, 20, 60),
 	},
-	
-	-- Blue Dark Theme
-	BlueDark = {
-		Name = "Blue Dark",
-		Primary = Color3.fromRGB(33, 150, 243),
-		Background = Color3.fromRGB(18, 32, 47),
-		Surface = Color3.fromRGB(28, 42, 57),
-		Text = Color3.fromRGB(255, 255, 255),
+
+	-- Medical Lab Theme
+	MedicalLab = {
+		Name = "Medical Laboratory",
+		Primary = Color3.fromRGB(80, 200, 120),
+		Background = Color3.fromRGB(18, 18, 22),
+		Surface = Color3.fromRGB(20, 30, 25),
+		Text = Color3.fromRGB(245, 245, 250),
+		Accent = Color3.fromRGB(80, 200, 120),
 	},
-	
-	-- Purple Dark Theme
-	PurpleDark = {
-		Name = "Purple Dark",
-		Primary = Color3.fromRGB(156, 39, 176),
-		Background = Color3.fromRGB(30, 20, 35),
-		Surface = Color3.fromRGB(45, 30, 50),
-		Text = Color3.fromRGB(255, 255, 255),
-	},
-	
-	-- Green Dark Theme
-	GreenDark = {
-		Name = "Green Dark",
-		Primary = Color3.fromRGB(76, 175, 80),
-		Background = Color3.fromRGB(20, 30, 20),
-		Surface = Color3.fromRGB(30, 45, 30),
-		Text = Color3.fromRGB(255, 255, 255),
+
+	-- Umbrella Blue (Alternative)
+	UmbrellaBlue = {
+		Name = "Umbrella Blue",
+		Primary = Color3.fromRGB(100, 150, 255),
+		Background = Color3.fromRGB(15, 20, 30),
+		Surface = Color3.fromRGB(20, 25, 35),
+		Text = Color3.fromRGB(245, 245, 250),
+		Accent = Color3.fromRGB(100, 150, 255),
 	},
 }
 

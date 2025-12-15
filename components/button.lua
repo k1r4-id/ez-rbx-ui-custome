@@ -48,59 +48,67 @@ function Button:Create(config)
 		parentContainer = nil
 	end
 	
-	-- Function to get variant colors
+	-- Function to get variant colors (UMBRELLA CORP: Updated with Umbrella Red)
 	local function getVariantColors(variantName)
 		local variants = {
 			primary = {
-				background = Colors.Button.Primary,
-				backgroundHover = Colors.Button.PrimaryHover,
+				background = Colors.Umbrella.Red,
+				backgroundHover = Colors.Umbrella.RedBright,
+				backgroundActive = Colors.Umbrella.RedDark,
 				text = Colors.Text.Primary,
-				border = Colors.Text.Primary
+				border = Colors.Umbrella.RedDark
 			},
 			secondary = {
-				background = Color3.fromRGB(108, 117, 125),
-				backgroundHover = Color3.fromRGB(90, 98, 104),
-				text = Color3.fromRGB(255, 255, 255),
-				border = Color3.fromRGB(108, 117, 125)
+				background = Colors.Surface.Default,
+				backgroundHover = Colors.Surface.Hover,
+				backgroundActive = Colors.Surface.Active,
+				text = Colors.Text.Primary,
+				border = Colors.Umbrella.Red
 			},
 			success = {
-				background = Color3.fromRGB(40, 167, 69),
-				backgroundHover = Color3.fromRGB(34, 142, 58),
-				text = Color3.fromRGB(255, 255, 255),
-				border = Color3.fromRGB(40, 167, 69)
+				background = Colors.Button.Success,
+				backgroundHover = Colors.Button.SuccessHover,
+				backgroundActive = Colors.Button.SuccessActive,
+				text = Colors.Text.Primary,
+				border = Colors.Button.Success
 			},
 			warning = {
-				background = Color3.fromRGB(255, 193, 7),
-				backgroundHover = Color3.fromRGB(217, 164, 6),
-				text = Color3.fromRGB(33, 37, 41),
-				border = Color3.fromRGB(255, 193, 7)
+				background = Colors.Button.Warning,
+				backgroundHover = Colors.Button.WarningHover,
+				backgroundActive = Colors.Button.WarningActive,
+				text = Colors.Background.Primary,
+				border = Colors.Button.Warning
 			},
 			danger = {
-				background = Color3.fromRGB(220, 53, 69),
-				backgroundHover = Color3.fromRGB(187, 45, 59),
-				text = Color3.fromRGB(255, 255, 255),
-				border = Color3.fromRGB(220, 53, 69)
+				background = Colors.Umbrella.Red,
+				backgroundHover = Colors.Umbrella.RedBright,
+				backgroundActive = Colors.Umbrella.RedDark,
+				text = Colors.Text.Primary,
+				border = Colors.Umbrella.RedDark
 			},
 			info = {
-				background = Color3.fromRGB(13, 202, 240),
-				backgroundHover = Color3.fromRGB(11, 172, 204),
-				text = Color3.fromRGB(255, 255, 255),
-				border = Color3.fromRGB(13, 202, 240)
+				background = Colors.Status.Info,
+				backgroundHover = Color3.fromRGB(120, 170, 255),
+				backgroundActive = Color3.fromRGB(80, 130, 235),
+				text = Colors.Text.Primary,
+				border = Colors.Status.Info
 			},
 			light = {
-				background = Color3.fromRGB(248, 249, 250),
-				backgroundHover = Color3.fromRGB(211, 212, 213),
-				text = Color3.fromRGB(33, 37, 41),
-				border = Color3.fromRGB(248, 249, 250)
+				background = Colors.Surface.Elevated,
+				backgroundHover = Colors.Surface.Hover,
+				backgroundActive = Colors.Surface.Active,
+				text = Colors.Text.Primary,
+				border = Colors.Border.Light
 			},
 			dark = {
-				background = Color3.fromRGB(33, 37, 41),
-				backgroundHover = Color3.fromRGB(28, 31, 35),
-				text = Color3.fromRGB(255, 255, 255),
-				border = Color3.fromRGB(33, 37, 41)
+				background = Colors.Background.Primary,
+				backgroundHover = Colors.Background.Secondary,
+				backgroundActive = Colors.Surface.Active,
+				text = Colors.Text.Primary,
+				border = Colors.Border.Dark
 			}
 		}
-		
+
 		return variants[variantName] or variants.primary
 	end
 	
@@ -111,49 +119,123 @@ function Button:Create(config)
 		-- Make button width responsive to content (takes full available width)
 		button.Size = UDim2.new(1, -10, 0, 25)
 		-- Don't set Position for accordion buttons - let UIListLayout handle it
-		button.BorderColor3 = variantColors.border
-		button.BorderSizePixel = 2
+		button.BorderSizePixel = 0
 		button.TextSize = 12
 		button.ZIndex = 5
-		
+
 		-- Round corners for accordion button
 		local buttonCorner = Instance.new("UICorner")
 		buttonCorner.CornerRadius = UDim.new(0, 4)
 		buttonCorner.Parent = button
-		
+
+		-- Border for secondary variant
+		if variant == "secondary" then
+			local buttonBorder = Instance.new("UIStroke")
+			buttonBorder.Color = variantColors.border
+			buttonBorder.Thickness = 1
+			buttonBorder.Parent = button
+		end
+
 		-- Button hover effects for accordion
 		button.MouseEnter:Connect(function()
 			button.BackgroundColor3 = variantColors.backgroundHover
 		end)
-		
+
 		button.MouseLeave:Connect(function()
 			button.BackgroundColor3 = variantColors.background
 		end)
 	else
-		button.Size = UDim2.new(0, 120, 0, 30)
+		-- UMBRELLA CORP: 34px height, 100px minWidth, 16px padding, 6px corner, 14px text, Gotham Semibold
+		button.Size = UDim2.new(0, 120, 0, 34)
 		button.Position = UDim2.new(0, 10, 0, currentY)
 		button.BorderSizePixel = 0
 		button.TextSize = 14
 		button.ZIndex = 3
 		button:SetAttribute("ComponentStartY", currentY)
+
+		-- Round corners (6px)
+		local buttonCorner = Instance.new("UICorner")
+		buttonCorner.CornerRadius = UDim.new(0, 6)
+		buttonCorner.Parent = button
+
+		-- Padding
+		local buttonPadding = Instance.new("UIPadding")
+		buttonPadding.PaddingLeft = UDim.new(0, 16)
+		buttonPadding.PaddingRight = UDim.new(0, 16)
+		buttonPadding.Parent = button
+
+		-- Glow for primary button (UMBRELLA CORP: red glow, transparency 0.8)
+		if variant == "primary" or variant == "danger" then
+			local buttonGlow = Instance.new("UIStroke")
+			buttonGlow.Color = Colors.Umbrella.Red
+			buttonGlow.Thickness = 1
+			buttonGlow.Transparency = 0.8
+			buttonGlow.Parent = button
+		end
+
+		-- Border for secondary variant
+		if variant == "secondary" then
+			local buttonBorder = Instance.new("UIStroke")
+			buttonBorder.Color = variantColors.border
+			buttonBorder.Thickness = 1
+			buttonBorder.Transparency = 0.9
+			buttonBorder.Parent = button
+		end
+
+		-- Shadow (UMBRELLA CORP: Black, transparency 0.7, 1px)
+		local buttonShadow = Instance.new("ImageLabel")
+		buttonShadow.Size = UDim2.new(1, 2, 1, 2)
+		buttonShadow.Position = UDim2.new(0, -1, 0, 1)
+		buttonShadow.BackgroundTransparency = 1
+		buttonShadow.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+		buttonShadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+		buttonShadow.ImageTransparency = 0.7
+		buttonShadow.ZIndex = button.ZIndex - 1
+		buttonShadow.Parent = button
 	end
 	button.BackgroundColor3 = variantColors.background
 	button.Text = text
 	button.TextColor3 = variantColors.text
-	button.Font = Enum.Font.SourceSans
+	button.Font = Enum.Font.GothamBold
 	button.TextScaled = false  -- Keep original text size
 	button.TextWrapped = false -- Don't wrap text to new lines
 	button.TextTruncate = Enum.TextTruncate.AtEnd -- Add ... at end if text is too long
 	button.Parent = parentContainer
 
-	-- Add hover effects for non-accordion buttons
+	-- Add hover effects for non-accordion buttons (UMBRELLA CORP: 0.15s Quad transition, glow 0.8 → 0.4)
 	if not isForAccordion then
 		button.MouseEnter:Connect(function()
-			button.BackgroundColor3 = variantColors.backgroundHover
+			local TweenService = game:GetService("TweenService")
+			local hoverTween = TweenService:Create(button, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+				BackgroundColor3 = variantColors.backgroundHover
+			})
+			hoverTween:Play()
+
+			-- Update glow on hover
+			local glow = button:FindFirstChild("UIStroke")
+			if glow and (variant == "primary" or variant == "danger") then
+				local glowTween = TweenService:Create(glow, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+					Transparency = 0.4
+				})
+				glowTween:Play()
+			end
 		end)
-		
+
 		button.MouseLeave:Connect(function()
-			button.BackgroundColor3 = variantColors.background
+			local TweenService = game:GetService("TweenService")
+			local leaveTween = TweenService:Create(button, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+				BackgroundColor3 = variantColors.background
+			})
+			leaveTween:Play()
+
+			-- Reset glow
+			local glow = button:FindFirstChild("UIStroke")
+			if glow and (variant == "primary" or variant == "danger") then
+				local glowTween = TweenService:Create(glow, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+					Transparency = 0.8
+				})
+				glowTween:Play()
+			end
 		end)
 	end
 

@@ -5,6 +5,11 @@ EXAMPLE_INPUT_FILE := ./example/main.lua
 EXAMPLE_OUTPUT_FILE := ./output/example.lua
 
 
+.PHONY: bundle
+bundle:
+	@echo "Running Python bundler..."
+	@python3 bundler.py
+
 .PHONY: build
 build:
 	@echo "Building Lua bundle..."

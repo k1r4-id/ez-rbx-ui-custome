@@ -90,19 +90,19 @@ function Window:CreateFloatingButton(screenGui, frame, toggleMinimizeCallback, a
 	floatingButton.Active = true
 	floatingButton.Parent = screenGui
 	
-	-- Rounded corners for floating button
+	-- Rounded corners for floating button - TUMPUL
 	local floatingCorner = Instance.new("UICorner")
-	floatingCorner.CornerRadius = UDim.new(0, 12)
+	floatingCorner.CornerRadius = UDim.new(0, 16) -- Lebih tumpul/rounded
 	floatingCorner.Parent = floatingButton
 	
-	-- Arrow icon
+	-- Biohazard icon ☣
 	local arrowIcon = Instance.new("TextLabel")
 	arrowIcon.Size = UDim2.new(1, 0, 1, 0)
 	arrowIcon.Position = UDim2.new(0, 0, 0, 0)
 	arrowIcon.BackgroundTransparency = 1
-	arrowIcon.Text = ">"
+	arrowIcon.Text = "☣" -- Biohazard icon
 	arrowIcon.TextColor3 = Colors.Text.Primary
-	arrowIcon.TextSize = 24
+	arrowIcon.TextSize = 28
 	arrowIcon.Font = Enum.Font.SourceSansBold
 	arrowIcon.TextXAlignment = Enum.TextXAlignment.Center
 	arrowIcon.TextYAlignment = Enum.TextYAlignment.Center
@@ -128,7 +128,7 @@ function Window:CreateFloatingButton(screenGui, frame, toggleMinimizeCallback, a
 	floatingShadow.Parent = floatingButton
 	
 	local shadowCorner = Instance.new("UICorner")
-	shadowCorner.CornerRadius = UDim.new(0, 12)
+	shadowCorner.CornerRadius = UDim.new(0, 16) -- Lebih tumpul/rounded
 	shadowCorner.Parent = floatingShadow
 	
 	-- Hover effects for floating button
@@ -141,49 +141,9 @@ function Window:CreateFloatingButton(screenGui, frame, toggleMinimizeCallback, a
 		floatingButton.BackgroundColor3 = originalColor
 	end)
 	
-	-- Dragging functionality for floating button
+	-- Dragging functionality for floating button (FREE PLACEMENT - NO SNAP)
 	local floatingDragging = false
 	local floatingDragInput, floatingDragStart, floatingStartPos
-	local isOnLeftSide = true -- Track which side the button is on
-	
-	local function snapFloatingButton()
-		-- Get viewport size
-		local viewportSize = Window:GetViewportSize()
-		local currentPos = floatingButton.AbsolutePosition
-		local buttonWidth = floatingButton.AbsoluteSize.X
-		local buttonHeight = floatingButton.AbsoluteSize.Y
-		
-		-- Determine which side is closer (left or right)
-		local distanceToLeft = currentPos.X
-		local distanceToRight = viewportSize.X - (currentPos.X + buttonWidth)
-		
-		local targetX, targetY
-		local offsetAmount = 15 -- How much to offset off-screen
-		
-		if distanceToLeft < distanceToRight then
-			-- Snap to left side - slightly off-screen
-			targetX = -offsetAmount
-			isOnLeftSide = true
-			arrowIcon.Text = ">"
-		else
-			-- Snap to right side - slightly off-screen
-			targetX = viewportSize.X - buttonWidth + offsetAmount
-			isOnLeftSide = false
-			arrowIcon.Text = "<"
-		end
-		
-		-- Keep Y position but clamp to viewport bounds
-		targetY = math.max(10, math.min(viewportSize.Y - buttonHeight - 10, currentPos.Y))
-		
-		-- Animate to snapped position
-		floatingButton:TweenPosition(
-			UDim2.new(0, targetX, 0, targetY),
-			Enum.EasingDirection.Out,
-			Enum.EasingStyle.Quad,
-			0.3,
-			true
-		)
-	end
 	
 	local function updateFloatingDrag(input)
 		local delta = input.Position - floatingDragStart
@@ -197,17 +157,16 @@ function Window:CreateFloatingButton(screenGui, frame, toggleMinimizeCallback, a
 	end
 	
 	floatingClickButton.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or 
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or
 		   input.UserInputType == Enum.UserInputType.Touch then
 			floatingDragging = true
 			floatingDragStart = input.Position
 			floatingStartPos = floatingButton.Position
-			
+
 			input.Changed:Connect(function()
 				if input.UserInputState == Enum.UserInputState.End then
 					floatingDragging = false
-					-- Snap to nearest side when drag ends
-					pcall(snapFloatingButton)
+					-- NO SNAP - button stays where dropped
 				end
 			end)
 		end
@@ -247,8 +206,8 @@ function Window:CreateFloatingButton(screenGui, frame, toggleMinimizeCallback, a
 	end)
 	
 	return {
-		Frame = floatingButton,
-		SnapToEdge = snapFloatingButton
+		Frame = floatingButton
+		-- NO SNAP FUNCTION - free placement enabled
 	}
 end
 
@@ -271,11 +230,8 @@ function Window:SetupMinimizeToggle(frame, floatingButton, originalPosition)
 				Enum.EasingDirection.Out,
 				Enum.EasingStyle.Quad,
 				0.3,
-				true,
-				function()
-					-- Snap to side after appearing
-					floatingButton.SnapToEdge()
-				end
+				true
+				-- NO SNAP - button stays in place
 			)
 		else
 			-- Restore: hide floating button and show window
@@ -499,89 +455,98 @@ function Window:Create(config)
 	
 	local windowWidth, windowHeight = self:CalculateDynamicSize(width, height)
 	
-	-- Main window frame
+	-- SpeedHub X Style Colors with UMBRELLA RED accent
+	local SH_Dark = Color3.fromRGB(30, 28, 32) -- Main dark background (warmer)
+	local SH_DarkAlt = Color3.fromRGB(45, 42, 48) -- Slightly lighter (warmer)
+	local SH_ItemBg = Color3.fromRGB(60, 56, 64) -- Item background (warmer)
+	local SH_Coral = Color3.fromRGB(220, 20, 60) -- UMBRELLA RED accent (changed from coral)
+	local SH_TextLight = Color3.fromRGB(245, 245, 245) -- Light text
+	local SH_TextMuted = Color3.fromRGB(160, 155, 165) -- Muted text
+
+	-- Main window frame - SEMI-TRANSPARENT (like SpeedHub)
 	local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(0, windowWidth, 0, windowHeight)
 	frame.Position = UDim2.new(0.5, -windowWidth / 2, 0.5, -windowHeight / 2)
-	frame.BackgroundColor3 = backgroundColor
-	frame.BackgroundTransparency = 1 - opacity
+	frame.BackgroundColor3 = SH_Dark
+	frame.BackgroundTransparency = 0.18 -- MORE TRANSPARENT (can see game behind)
 	frame.BorderSizePixel = 0
 	frame.Active = true
 	frame.ClipsDescendants = true
 	frame.ZIndex = 1
 	frame.Visible = autoShow
 	frame.Parent = screenGui
-	
-	-- Rounded corners
+
+	-- Rounded corners - TUMPUL/MEMBULAT (larger radius)
 	local frameCorner = Instance.new("UICorner")
-	frameCorner.CornerRadius = UDim.new(0, cornerRadius)
+	frameCorner.CornerRadius = UDim.new(0, 16) -- Lebih tumpul/rounded
 	frameCorner.Parent = frame
-	
-	-- Title bar
+
+	-- Title bar - Slightly transparent
 	local titleBar = Instance.new("Frame")
-	titleBar.Size = UDim2.new(1, 0, 0, 30)
+	titleBar.Size = UDim2.new(1, 0, 0, 45) -- Taller title bar
 	titleBar.Position = UDim2.new(0, 0, 0, 0)
-	titleBar.BackgroundColor3 = Colors.Background.Primary
+	titleBar.BackgroundColor3 = SH_Dark
+	titleBar.BackgroundTransparency = 0.1 -- Slight transparency
 	titleBar.BorderSizePixel = 0
 	titleBar.ZIndex = 2
 	titleBar.Parent = frame
-	
-	-- Title bar rounded corners (top only)
+
+	-- Title bar rounded corners (match main frame)
 	local titleCorner = Instance.new("UICorner")
-	titleCorner.CornerRadius = UDim.new(0, cornerRadius)
+	titleCorner.CornerRadius = UDim.new(0, 16) -- Same as main frame
 	titleCorner.Parent = titleBar
-	
-	-- Title text
+
+	-- Title text - UMBRELLA RED color
 	local titleLabel = Instance.new("TextLabel")
-	titleLabel.Size = UDim2.new(1, -70, 1, 0)
-	titleLabel.Position = UDim2.new(0, 10, 0, 0)
+	titleLabel.Size = UDim2.new(1, -80, 1, 0)
+	titleLabel.Position = UDim2.new(0, 20, 0, 0)
 	titleLabel.BackgroundTransparency = 1
 	titleLabel.Text = title
-	titleLabel.TextColor3 = Colors.Text.Primary
-	titleLabel.TextSize = 16
-	titleLabel.Font = Enum.Font.SourceSansBold
+	titleLabel.TextColor3 = SH_Coral -- Salmon/coral title
+	titleLabel.TextSize = 17
+	titleLabel.Font = Enum.Font.GothamBold
 	titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 	titleLabel.ZIndex = 3
 	titleLabel.Parent = titleBar
 	
-	-- Minimize button
+	-- Minimize button (SpeedHub style)
 	local minimizeBtn = Instance.new("TextButton")
-	minimizeBtn.Size = UDim2.new(0, 30, 0, 30)
-	minimizeBtn.Position = UDim2.new(1, -60, 0, 0)
+	minimizeBtn.Size = UDim2.new(0, 30, 0, 40)
+	minimizeBtn.Position = UDim2.new(1, -70, 0, 0)
 	minimizeBtn.BackgroundTransparency = 1
-	minimizeBtn.Text = "−"
-	minimizeBtn.TextColor3 = Colors.Text.Primary
-	minimizeBtn.TextSize = 24
-	minimizeBtn.Font = Enum.Font.SourceSansBold
+	minimizeBtn.Text = "-"
+	minimizeBtn.TextColor3 = SH_TextMuted
+	minimizeBtn.TextSize = 22
+	minimizeBtn.Font = Enum.Font.GothamBold
 	minimizeBtn.ZIndex = 3
 	minimizeBtn.Parent = titleBar
-	
+
 	minimizeBtn.MouseEnter:Connect(function()
-		minimizeBtn.TextColor3 = Colors.Accent.Primary
+		minimizeBtn.TextColor3 = SH_TextLight
 	end)
-	
+
 	minimizeBtn.MouseLeave:Connect(function()
-		minimizeBtn.TextColor3 = Colors.Text.Primary
+		minimizeBtn.TextColor3 = SH_TextMuted
 	end)
-	
-	-- Close button
+
+	-- Close button (SpeedHub style)
 	local closeBtn = Instance.new("TextButton")
-	closeBtn.Size = UDim2.new(0, 30, 0, 30)
-	closeBtn.Position = UDim2.new(1, -30, 0, 0)
+	closeBtn.Size = UDim2.new(0, 30, 0, 40)
+	closeBtn.Position = UDim2.new(1, -35, 0, 0)
 	closeBtn.BackgroundTransparency = 1
-	closeBtn.Text = "×"
-	closeBtn.TextColor3 = Colors.Text.Primary
-	closeBtn.TextSize = 24
-	closeBtn.Font = Enum.Font.SourceSansBold
+	closeBtn.Text = "X"
+	closeBtn.TextColor3 = SH_TextMuted
+	closeBtn.TextSize = 18
+	closeBtn.Font = Enum.Font.GothamBold
 	closeBtn.ZIndex = 3
 	closeBtn.Parent = titleBar
-	
+
 	closeBtn.MouseEnter:Connect(function()
-		closeBtn.TextColor3 = Colors.Status.Error
+		closeBtn.TextColor3 = SH_TextLight
 	end)
-	
+
 	closeBtn.MouseLeave:Connect(function()
-		closeBtn.TextColor3 = Colors.Text.Primary
+		closeBtn.TextColor3 = SH_TextMuted
 	end)
 	
 	-- Create confirmation dialog elements (hidden by default)
@@ -604,7 +569,7 @@ function Window:Create(config)
 	confirmationDialog.Parent = confirmationOverlay
 	
 	local confirmDialogCorner = Instance.new("UICorner")
-	confirmDialogCorner.CornerRadius = UDim.new(0, 8)
+	confirmDialogCorner.CornerRadius = UDim.new(0, 14) -- Lebih tumpul/rounded
 	confirmDialogCorner.Parent = confirmationDialog
 	
 	-- Confirmation dialog title
@@ -657,7 +622,7 @@ function Window:Create(config)
 	cancelBtn.Parent = buttonContainer
 	
 	local cancelCorner = Instance.new("UICorner")
-	cancelCorner.CornerRadius = UDim.new(0, 6)
+	cancelCorner.CornerRadius = UDim.new(0, 10) -- Lebih tumpul
 	cancelCorner.Parent = cancelBtn
 	
 	-- Confirm button
@@ -674,7 +639,7 @@ function Window:Create(config)
 	confirmBtn.Parent = buttonContainer
 	
 	local confirmCorner = Instance.new("UICorner")
-	confirmCorner.CornerRadius = UDim.new(0, 6)
+	confirmCorner.CornerRadius = UDim.new(0, 10) -- Lebih tumpul
 	confirmCorner.Parent = confirmBtn
 	
 	-- Button hover effects
@@ -722,15 +687,28 @@ function Window:Create(config)
 		confirmationOverlay.Visible = true
 	end)
 	
-	-- Tab panel (left side)
+	-- Tab panel (left side) - SpeedHub style TRANSPARENT
 	local tabPanel = Instance.new("Frame")
-	tabPanel.Size = UDim2.new(0, tabPanelWidth, 1, -30)
-	tabPanel.Position = UDim2.new(0, 0, 0, 30)
-	tabPanel.BackgroundColor3 = Colors.Background.Primary
+	tabPanel.Size = UDim2.new(0, tabPanelWidth, 1, -45) -- Adjusted for taller title bar
+	tabPanel.Position = UDim2.new(0, 0, 0, 45)
+	tabPanel.BackgroundColor3 = SH_Dark
+	tabPanel.BackgroundTransparency = 0.15 -- Semi-transparent
 	tabPanel.BorderSizePixel = 0
 	tabPanel.ZIndex = 2
 	tabPanel.Parent = frame
-	
+
+	-- Tab panel rounded corner (bottom-left)
+	local tabPanelCorner = Instance.new("UICorner")
+	tabPanelCorner.CornerRadius = UDim.new(0, 16) -- Match main frame
+	tabPanelCorner.Parent = tabPanel
+
+	-- Tab panel padding
+	local tabPadding = Instance.new("UIPadding")
+	tabPadding.PaddingTop = UDim.new(0, 12)
+	tabPadding.PaddingLeft = UDim.new(0, 12)
+	tabPadding.PaddingRight = UDim.new(0, 8)
+	tabPadding.Parent = tabPanel
+
 	-- Tab scroll frame
 	local tabScrollFrame = Instance.new("ScrollingFrame")
 	tabScrollFrame.Size = UDim2.new(1, 0, 1, 0)
@@ -738,30 +716,36 @@ function Window:Create(config)
 	tabScrollFrame.BackgroundTransparency = 1
 	tabScrollFrame.BorderSizePixel = 0
 	tabScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
-	tabScrollFrame.ScrollBarThickness = 6
-	tabScrollFrame.ScrollBarImageColor3 = Colors.Scrollbar.Thumb
+	tabScrollFrame.ScrollBarThickness = 3
+	tabScrollFrame.ScrollBarImageColor3 = SH_ItemBg
 	tabScrollFrame.ZIndex = 3
 	tabScrollFrame.Parent = tabPanel
-	
-	-- List layout for tabs
+
+	-- List layout for tabs (more spacing like SpeedHub)
 	local tabListLayout = Instance.new("UIListLayout")
 	tabListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	tabListLayout.Padding = UDim.new(0, 3)
+	tabListLayout.Padding = UDim.new(0, 5) -- Spacing between tabs
 	tabListLayout.Parent = tabScrollFrame
-	
-	-- Content scroll frame
+
+	-- Content scroll frame - SpeedHub style TRANSPARENT
 	local scrollFrame = Instance.new("ScrollingFrame")
-	scrollFrame.Size = UDim2.new(1, -tabPanelWidth, 1, -30)
-	scrollFrame.Position = UDim2.new(0, tabPanelWidth, 0, 30)
-	scrollFrame.BackgroundTransparency = 1
+	scrollFrame.Size = UDim2.new(1, -tabPanelWidth, 1, -45) -- Adjusted for taller title bar
+	scrollFrame.Position = UDim2.new(0, tabPanelWidth, 0, 45)
+	scrollFrame.BackgroundColor3 = SH_DarkAlt
+	scrollFrame.BackgroundTransparency = 0.12 -- Semi-transparent content area
 	scrollFrame.BorderSizePixel = 0
 	scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
-	scrollFrame.ScrollBarThickness = 8
-	scrollFrame.ScrollBarImageColor3 = Colors.Scrollbar.Thumb
+	scrollFrame.ScrollBarThickness = 5
+	scrollFrame.ScrollBarImageColor3 = SH_ItemBg
 	scrollFrame.ClipsDescendants = true
 	scrollFrame.ZIndex = 2
 	scrollFrame.Parent = frame
-	
+
+	-- Content scroll frame rounded corner (bottom-right)
+	local scrollCorner = Instance.new("UICorner")
+	scrollCorner.CornerRadius = UDim.new(0, 16) -- Match main frame
+	scrollCorner.Parent = scrollFrame
+
 	-- Function to update canvas size (USING OLD UI.LUA LOGIC - Line ~692)
 	local updateCanvasSize  -- Forward declaration
 	

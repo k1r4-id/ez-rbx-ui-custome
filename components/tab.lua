@@ -56,54 +56,63 @@ function Tab:Create(config)
 		tabContents[tabName] = tabContent
 	end
 	
-	-- Tab button (container)
+	-- SpeedHub style colors with UMBRELLA RED accent
+	local SH_DarkAlt = Color3.fromRGB(50, 47, 55) -- Selected tab background (warmer)
+	local SH_ItemBg = Color3.fromRGB(65, 60, 70) -- Hover background (warmer)
+	local SH_Coral = Color3.fromRGB(220, 20, 60) -- UMBRELLA RED accent (changed from coral)
+	local SH_TextLight = Color3.fromRGB(245, 245, 245)
+
+	-- Tab button (SpeedHub style: 40px height, rounded corners)
 	local tabBtn = Instance.new("TextButton")
-	tabBtn.Size = UDim2.new(1, -10, 0, 36)
-	tabBtn.BackgroundTransparency = 1
+	tabBtn.Size = UDim2.new(1, 0, 0, 40)
+	tabBtn.BackgroundColor3 = Color3.fromRGB(30, 28, 32) -- Default dark (warmer)
+	tabBtn.BackgroundTransparency = 1 -- Transparent by default
 	tabBtn.Text = ""
 	tabBtn.BorderSizePixel = 0
 	tabBtn.ZIndex = 4
 	tabBtn.Visible = tabVisible
 	tabBtn.Parent = tabScrollFrame
-	
-	-- Rounded corners for tab button (only right side)
+
+	-- Rounded corners for tab button - TUMPUL (more rounded)
 	local tabCorner = Instance.new("UICorner")
-	tabCorner.CornerRadius = UDim.new(0, 6)
+	tabCorner.CornerRadius = UDim.new(0, 12) -- Lebih tumpul/rounded
 	tabCorner.Parent = tabBtn
-	
-	-- Active indicator (left border with rounded right side)
+
+	-- Active indicator (SpeedHub: left bar, coral color)
 	local activeIndicator = Instance.new("Frame")
-	activeIndicator.Size = UDim2.new(0, 4, 0, 24)
-	activeIndicator.Position = UDim2.new(0, 0, 0.5, -12)
-	activeIndicator.BackgroundColor3 = Colors.Accent.Primary
+	activeIndicator.Size = UDim2.new(0, 3, 0, 26)
+	activeIndicator.Position = UDim2.new(0, 4, 0.5, -13)
+	activeIndicator.BackgroundColor3 = SH_Coral -- Coral accent
 	activeIndicator.BorderSizePixel = 0
 	activeIndicator.ZIndex = 6
 	activeIndicator.Visible = false
 	activeIndicator.Parent = tabBtn
-	
+
 	local indicatorCorner = Instance.new("UICorner")
-	indicatorCorner.CornerRadius = UDim.new(0, 4)
+	indicatorCorner.CornerRadius = UDim.new(0, 2)
 	indicatorCorner.Parent = activeIndicator
-	
-	-- Icon label (left aligned)
+
+	-- No glow animation for cleaner SpeedHub look
+
+	-- Icon label (SpeedHub style: left side with icon)
 	local iconLabel = Instance.new("TextLabel")
-	iconLabel.Size = UDim2.new(0, 30, 1, 0)
-	iconLabel.Position = UDim2.new(0, 8, 0, 0)
+	iconLabel.Size = UDim2.new(0, 28, 1, 0)
+	iconLabel.Position = UDim2.new(0, 14, 0, 0)
 	iconLabel.BackgroundTransparency = 1
 	iconLabel.Text = tabIcon or ""
-	iconLabel.TextColor3 = Colors.Tab.TextInactive
-	iconLabel.Font = Enum.Font.GothamBold
+	iconLabel.TextColor3 = SH_TextLight -- Light text
+	iconLabel.Font = Enum.Font.GothamMedium
 	iconLabel.TextSize = 16
 	iconLabel.TextXAlignment = Enum.TextXAlignment.Left
 	iconLabel.ZIndex = 5
 	iconLabel.Parent = tabBtn
-	
-	-- Title label (right aligned)
+
+	-- Title label (SpeedHub style: 14px, light text)
 	local titleLabel = Instance.new("TextLabel")
 	titleLabel.BackgroundTransparency = 1
 	titleLabel.Text = tabName
-	titleLabel.TextColor3 = Colors.Tab.TextInactive
-	titleLabel.Font = Enum.Font.GothamBold
+	titleLabel.TextColor3 = SH_TextLight -- Light text
+	titleLabel.Font = Enum.Font.GothamMedium
 	titleLabel.TextSize = 14
 	titleLabel.TextTruncate = Enum.TextTruncate.AtEnd
 	titleLabel.ZIndex = 5
@@ -180,11 +189,11 @@ function Tab:Create(config)
 	function tabAPI:Select()
 		tabContent.Visible = true
 		tabBtn.BackgroundTransparency = 0
-		tabBtn.BackgroundColor3 = Colors.Tab.BackgroundActive
+		tabBtn.BackgroundColor3 = SH_DarkAlt -- SpeedHub selected background
 		activeIndicator.Visible = true
-		titleLabel.TextColor3 = Colors.Text.Primary
-		iconLabel.TextColor3 = Colors.Text.Primary
-		
+		titleLabel.TextColor3 = SH_TextLight
+		iconLabel.TextColor3 = SH_TextLight
+
 		-- Update canvas size when tab becomes active
 		if updateCanvasSize then
 			-- Wait a frame to ensure visibility changes are processed
@@ -193,29 +202,47 @@ function Tab:Create(config)
 				updateCanvasSize()
 			end)
 		end
-		
+
 		if tabCallback then
 			tabCallback()
 		end
 	end
-	
+
 	function tabAPI:Deselect()
 		tabContent.Visible = false
 		tabBtn.BackgroundTransparency = 1
 		activeIndicator.Visible = false
-		titleLabel.TextColor3 = Colors.Tab.TextInactive
-		iconLabel.TextColor3 = Colors.Tab.TextInactive
+		titleLabel.TextColor3 = SH_TextLight
+		iconLabel.TextColor3 = SH_TextLight
 	end
-	
-	-- Hover effects
+
+	-- Hover effects (SpeedHub style: slight background change)
 	tabBtn.MouseEnter:Connect(function()
 		if not tabContent.Visible then
 			tabBtn.BackgroundTransparency = 0
-			tabBtn.BackgroundColor3 = Colors.Tab.BackgroundHover
+			tabBtn.BackgroundColor3 = SH_ItemBg -- Hover background
+			local hoverGlow = tabBtn:FindFirstChild("HoverGlow")
+			if not hoverGlow then
+				hoverGlow = Instance.new("Frame")
+				hoverGlow.Name = "HoverGlow"
+				hoverGlow.Size = UDim2.new(1, 0, 1, 0)
+				hoverGlow.BackgroundColor3 = Colors.Umbrella.Red
+				hoverGlow.BackgroundTransparency = 0.9
+				hoverGlow.BorderSizePixel = 0
+				hoverGlow.ZIndex = 5
+				hoverGlow.Parent = tabBtn
+				local hoverCorner = Instance.new("UICorner")
+				hoverCorner.CornerRadius = UDim.new(0, 6)
+				hoverCorner.Parent = hoverGlow
+			end
 		end
 	end)
-	
+
 	tabBtn.MouseLeave:Connect(function()
+		local hoverGlow = tabBtn:FindFirstChild("HoverGlow")
+		if hoverGlow then
+			hoverGlow:Destroy()
+		end
 		if not tabContent.Visible then
 			tabBtn.BackgroundTransparency = 1
 		else

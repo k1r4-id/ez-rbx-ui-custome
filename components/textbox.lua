@@ -81,11 +81,11 @@ function TextBox:Create(config)
 		end
 	end
 	
-		-- Calculate heights based on whether we have a title label
+	-- Calculate heights based on whether we have a title label (UMBRELLA CORP: 34px input height, 14px text)
 	local hasTitle = name and name ~= ""
 	local labelHeight = hasTitle and 18 or 0
-	local inputHeight = multiline and (isForAccordion and 60 or 80) or (isForAccordion and 25 or 30)
-	local totalHeight = labelHeight + inputHeight + (hasTitle and 2 or 0) -- 2px spacing between label and input
+	local inputHeight = multiline and (isForAccordion and 60 or 80) or (isForAccordion and 25 or 34)
+	local totalHeight = labelHeight + inputHeight + (hasTitle and 6 or 0) -- 6px spacing between label and input
 	
 	-- Main textbox container
 	local textBoxContainer = Instance.new("Frame")
@@ -122,11 +122,11 @@ function TextBox:Create(config)
 	-- Calculate button width (each button is 80px wide + 5px spacing)
 	local buttonWidth = hasButtons and (#buttons * 85) or 0 -- 80px + 5px spacing per button
 	
-	-- TextBox input
+	-- TextBox input (UMBRELLA CORP: 34px height, 12px padding, 6px corner, 14px text)
 	local textBox = Instance.new("TextBox")
 	if hasTitle then
 		textBox.Size = UDim2.new(1, -buttonWidth, 0, inputHeight)
-		textBox.Position = UDim2.new(0, 0, 0, labelHeight + 2)
+		textBox.Position = UDim2.new(0, 0, 0, labelHeight + 6)
 	else
 		if hasButtons then
 			textBox.Size = UDim2.new(1, -buttonWidth, 1, 0)
@@ -136,13 +136,12 @@ function TextBox:Create(config)
 		textBox.Position = UDim2.new(0, 0, 0, 0)
 	end
 	textBox.BackgroundColor3 = Colors.Input.Background
-	textBox.BorderColor3 = Colors.Input.Border
-	textBox.BorderSizePixel = 1
+	textBox.BorderSizePixel = 0
 	textBox.Text = defaultText
 	textBox.PlaceholderText = placeholder
 	textBox.TextColor3 = Colors.Input.Text
-	textBox.PlaceholderColor3 = Colors.Text.Tertiary
-	textBox.Font = Enum.Font.SourceSans
+	textBox.PlaceholderColor3 = Colors.Input.Placeholder
+	textBox.Font = Enum.Font.Gotham
 	textBox.TextSize = isForAccordion and 12 or 14
 	textBox.TextXAlignment = Enum.TextXAlignment.Left
 	textBox.TextYAlignment = multiline and Enum.TextYAlignment.Top or Enum.TextYAlignment.Center
@@ -153,19 +152,53 @@ function TextBox:Create(config)
 	textBox.ClipsDescendants = true -- Clip text that overflows the TextBox
 	textBox.ZIndex = isForAccordion and 7 or 4
 	textBox.Parent = textBoxContainer
-	
-	-- Add padding to TextBox
+
+	-- Add padding to TextBox (UMBRELLA CORP: 12px horizontal, 8px vertical)
 	local padding = Instance.new("UIPadding")
-	padding.PaddingLeft = UDim.new(0, 8)
-	padding.PaddingRight = UDim.new(0, 8)
-	padding.PaddingTop = multiline and UDim.new(0, 4) or UDim.new(0, 0)
-	padding.PaddingBottom = multiline and UDim.new(0, 4) or UDim.new(0, 0)
+	padding.PaddingLeft = UDim.new(0, 12)
+	padding.PaddingRight = UDim.new(0, 12)
+	padding.PaddingTop = multiline and UDim.new(0, 8) or UDim.new(0, 0)
+	padding.PaddingBottom = multiline and UDim.new(0, 8) or UDim.new(0, 0)
 	padding.Parent = textBox
-	
-	-- Round corners
+
+	-- Round corners (UMBRELLA CORP: 6px)
 	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 4)
+	corner.CornerRadius = UDim.new(0, 6)
 	corner.Parent = textBox
+
+	-- Default border (gray, transparency 0.6)
+	local defaultBorder = Instance.new("UIStroke")
+	defaultBorder.Color = Colors.Input.Border
+	defaultBorder.Thickness = 1
+	defaultBorder.Transparency = 0.6
+	defaultBorder.Parent = textBox
+
+	-- Red focus glow (UMBRELLA CORP: Umbrella Red, pulsing 0.7 ↔ 0.5, 1.5s Sine)
+	local focusGlow = Instance.new("UIStroke")
+	focusGlow.Name = "FocusGlow"
+	focusGlow.Color = Colors.Umbrella.Red
+	focusGlow.Thickness = 1
+	focusGlow.Transparency = 1
+	focusGlow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	focusGlow.Parent = textBox
+
+	-- Pulsing glow animation (only when focused)
+	local isFocused = false
+	task.spawn(function()
+		local TweenService = game:GetService("TweenService")
+		while textBox and textBox.Parent do
+			if isFocused then
+				local fadeIn = TweenService:Create(focusGlow, TweenInfo.new(0.75, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.5})
+				local fadeOut = TweenService:Create(focusGlow, TweenInfo.new(0.75, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.7})
+				fadeIn:Play()
+				fadeIn.Completed:Wait()
+				fadeOut:Play()
+				fadeOut.Completed:Wait()
+			else
+				task.wait(0.1)
+			end
+		end
+	end)
 	
 	-- Character counter (if maxLength is set)
 	local charCounter = nil
@@ -291,13 +324,31 @@ function TextBox:Create(config)
 		end
 	end)
 	
-	-- Focus effects
+	-- Focus effects (UMBRELLA CORP: Show red glow on focus, 0.15s Quad transition)
 	textBox.Focused:Connect(function()
-		textBox.BorderColor3 = Colors.Input.BorderFocus
+		isFocused = true
+		local TweenService = game:GetService("TweenService")
+		-- Hide default border, show focus glow
+		local borderTween = TweenService:Create(defaultBorder, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 1})
+		local glowTween = TweenService:Create(focusGlow, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 0.7})
+		-- Slightly lighter background on focus
+		local bgTween = TweenService:Create(textBox, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundColor3 = Colors.Input.BackgroundFocus})
+		borderTween:Play()
+		glowTween:Play()
+		bgTween:Play()
 	end)
-	
+
 	textBox.FocusLost:Connect(function()
-		textBox.BorderColor3 = Colors.Input.Border
+		isFocused = false
+		local TweenService = game:GetService("TweenService")
+		-- Show default border, hide focus glow
+		local borderTween = TweenService:Create(defaultBorder, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 0.6})
+		local glowTween = TweenService:Create(focusGlow, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 1})
+		-- Reset background color
+		local bgTween = TweenService:Create(textBox, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundColor3 = Colors.Input.Background})
+		borderTween:Play()
+		glowTween:Play()
+		bgTween:Play()
 	end)
 	
 	-- Return TextBox API

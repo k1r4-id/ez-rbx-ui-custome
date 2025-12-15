@@ -104,73 +104,107 @@ function Toggle:Create(config)
 	toggleLabel.Font = Enum.Font.SourceSans
 	toggleLabel.Parent = toggleContainer
 	
-	-- Toggle switch background
+	-- Toggle switch background (UMBRELLA CORP: 52x28px, 14px corner for perfect pill)
 	local toggleBg = Instance.new("Frame")
 	if isForAccordion then
 		toggleBg.Size = UDim2.new(0, 40, 0, 20)
 		toggleBg.Position = UDim2.new(1, -40, 0.5, -10)
 		toggleBg.ZIndex = 7
 	else
-		toggleBg.Size = UDim2.new(0, 50, 0, 24)
-		toggleBg.Position = UDim2.new(1, -50, 0.5, -12)
+		toggleBg.Size = UDim2.new(0, 52, 0, 28)
+		toggleBg.Position = UDim2.new(1, -52, 0.5, -14)
 		toggleBg.ZIndex = 4
 	end
 	toggleBg.BackgroundColor3 = isToggled and Colors.Toggle.On or Colors.Toggle.Off
 	toggleBg.BorderSizePixel = 0
 	toggleBg.Parent = toggleContainer
-	
-	-- Round corners for toggle background
+
+	-- Round corners for toggle background (perfect pill shape)
 	local toggleBgCorner = Instance.new("UICorner")
-	toggleBgCorner.CornerRadius = UDim.new(0, isForAccordion and 10 or 12)
+	toggleBgCorner.CornerRadius = UDim.new(0, isForAccordion and 10 or 14)
 	toggleBgCorner.Parent = toggleBg
-	
-	-- Toggle switch button (circle)
+
+	-- Red glow for ON state (UMBRELLA CORP: pulsing 0.6 ↔ 0.4, 1.2s Sine)
+	local toggleGlow = Instance.new("UIStroke")
+	toggleGlow.Color = Colors.Umbrella.Red
+	toggleGlow.Thickness = 1
+	toggleGlow.Transparency = isToggled and 0.6 or 1
+	toggleGlow.Parent = toggleBg
+
+	-- Pulsing glow animation for ON state
+	task.spawn(function()
+		local TweenService = game:GetService("TweenService")
+		while toggleBg and toggleBg.Parent do
+			if isToggled then
+				local fadeIn = TweenService:Create(toggleGlow, TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.4})
+				local fadeOut = TweenService:Create(toggleGlow, TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.6})
+				fadeIn:Play()
+				fadeIn.Completed:Wait()
+				fadeOut:Play()
+				fadeOut.Completed:Wait()
+			else
+				toggleGlow.Transparency = 1
+				task.wait(0.1)
+			end
+		end
+	end)
+
+	-- Toggle switch button (circle) (UMBRELLA CORP: 24x24px)
 	local toggleButton = Instance.new("TextButton")
 	if isForAccordion then
 		toggleButton.Size = UDim2.new(0, 16, 0, 16)
 		toggleButton.Position = isToggled and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)
 		toggleButton.ZIndex = 8
 	else
-		toggleButton.Size = UDim2.new(0, 20, 0, 20)
-		toggleButton.Position = isToggled and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
+		toggleButton.Size = UDim2.new(0, 24, 0, 24)
+		toggleButton.Position = isToggled and UDim2.new(1, -26, 0.5, -12) or UDim2.new(0, 2, 0.5, -12)
 		toggleButton.ZIndex = 5
 	end
 	toggleButton.BackgroundColor3 = Colors.Toggle.Handle
 	toggleButton.BorderSizePixel = 0
 	toggleButton.Text = ""
 	toggleButton.Parent = toggleBg
-	
-	-- Round corners for toggle button
+
+	-- Round corners for toggle button (full circle)
 	local toggleButtonCorner = Instance.new("UICorner")
-	toggleButtonCorner.CornerRadius = UDim.new(0, isForAccordion and 8 or 10)
+	toggleButtonCorner.CornerRadius = UDim.new(1, 0)
 	toggleButtonCorner.Parent = toggleButton
 	
-	-- Function to update toggle appearance
+	-- Function to update toggle appearance (UMBRELLA CORP: 0.2s Quad, smooth professional)
 	local function updateToggleAppearance()
 		local targetBgColor = isToggled and Colors.Toggle.On or Colors.Toggle.Off
 		local targetPosition
-		
+		local targetGlowTransparency = isToggled and 0.6 or 1
+
 		if isForAccordion then
 			targetPosition = isToggled and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)
 		else
-			targetPosition = isToggled and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
+			targetPosition = isToggled and UDim2.new(1, -26, 0.5, -12) or UDim2.new(0, 2, 0.5, -12)
 		end
-		
+
 		-- Animate background color
 		local bgTween = game:GetService("TweenService"):Create(
 			toggleBg,
-			TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+			TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 			{BackgroundColor3 = targetBgColor}
 		)
 		bgTween:Play()
-		
+
 		-- Animate button position
 		local buttonTween = game:GetService("TweenService"):Create(
 			toggleButton,
-			TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+			TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 			{Position = targetPosition}
 		)
 		buttonTween:Play()
+
+		-- Animate glow transparency
+		local glowTween = game:GetService("TweenService"):Create(
+			toggleGlow,
+			TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+			{Transparency = targetGlowTransparency}
+		)
+		glowTween:Play()
 	end
 	
 	-- Toggle click handler

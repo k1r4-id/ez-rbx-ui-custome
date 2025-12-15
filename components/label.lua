@@ -48,6 +48,7 @@ function Label:Create(config)
 		parentContainer = nil
 	end
 	
+	-- Label (UMBRELLA CORP: 14px text, 20px height, Gotham Regular, 8px vertical padding)
 	local label = Instance.new("TextLabel")
 	if isForAccordion then
 		-- Calculate height based on text size with some padding
@@ -59,9 +60,9 @@ function Label:Create(config)
 		label.ZIndex = 5
 		-- No debug background needed
 	else
-		label.Size = UDim2.new(1, -20, 0, 30)
+		label.Size = UDim2.new(1, -20, 0, 20)
 		label.Position = UDim2.new(0, 10, 0, currentY)
-		label.TextSize = textSize or 16
+		label.TextSize = textSize or 14
 		label.ZIndex = 3
 		label:SetAttribute("ComponentStartY", currentY)
 	end
@@ -69,15 +70,22 @@ function Label:Create(config)
 	local labelText = type(text) == "function" and text() or text
 	label.Text = tostring(labelText or "")
 	label.TextColor3 = textColor or Colors.Text.Primary
-	
+
 	-- Debug: Ensure text is visible by using a contrasting color for accordion labels
 	if isForAccordion and not textColor then
-		label.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text for accordion labels
+		label.TextColor3 = Colors.Text.Primary
 	end
 	label.TextXAlignment = Enum.TextXAlignment.Left
-	label.Font = Enum.Font.SourceSans
+	label.TextYAlignment = Enum.TextYAlignment.Top
+	label.Font = Enum.Font.Gotham
 	label.Visible = true -- Ensure label is visible
 	label.Parent = parentContainer
+
+	-- Padding (UMBRELLA CORP: 8px vertical)
+	local labelPadding = Instance.new("UIPadding")
+	labelPadding.PaddingTop = UDim.new(0, 8)
+	labelPadding.PaddingBottom = UDim.new(0, 8)
+	labelPadding.Parent = label
 	
 	-- Store the text source (function or string)
 	local textSource = text

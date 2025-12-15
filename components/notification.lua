@@ -11,14 +11,14 @@ local Notification = {}
 local Colors
 local TweenService = game:GetService("TweenService")
 
--- Global notification container and state
+-- Global notification container and state (UMBRELLA CORP: 340px width, 60px height)
 local NotificationContainer = nil
 local ActiveNotifications = {}
 local NotificationId = 0
 local MaxNotifications = 5
-local NotificationWidth = 300  -- Reduced from 350
-local NotificationHeight = 55  -- Reduced from 70
-local StackOffset = 6          -- Reduced from 8
+local NotificationWidth = 340
+local NotificationHeight = 60
+local StackOffset = 8
 local AnimationDuration = 0.3
 
 function Notification:Init(_colors)
@@ -97,41 +97,48 @@ local function createNotification(config)
 	shadowCorner.CornerRadius = UDim.new(0, 10)
 	shadowCorner.Parent = shadow
 	
-	-- Status indicator (colored bar)
+	-- Status indicator (UMBRELLA CORP: 4px thick colored left border)
 	local indicator = Instance.new("Frame")
-	indicator.Size = UDim2.new(0, 4, 1, -12)
-	indicator.Position = UDim2.new(0, 6, 0, 6)
+	indicator.Size = UDim2.new(0, 4, 1, -16)
+	indicator.Position = UDim2.new(0, 8, 0, 8)
 	indicator.BorderSizePixel = 0
 	indicator.ZIndex = notification.ZIndex + 1
 	indicator.Parent = notification
-	
+
 	if notificationType == "success" then
 		indicator.BackgroundColor3 = Colors.Status.Success
 	elseif notificationType == "warning" then
 		indicator.BackgroundColor3 = Colors.Status.Warning
 	elseif notificationType == "error" then
-		indicator.BackgroundColor3 = Colors.Status.Error
+		indicator.BackgroundColor3 = Colors.Umbrella.Red
 	else -- info
-		indicator.BackgroundColor3 = Colors.Accent.Primary
+		indicator.BackgroundColor3 = Colors.Status.Info
 	end
-	
+
 	local indicatorCorner = Instance.new("UICorner")
 	indicatorCorner.CornerRadius = UDim.new(0, 2)
 	indicatorCorner.Parent = indicator
+
+	-- Glow matching indicator color (UMBRELLA CORP: subtle pulse)
+	local indicatorGlow = Instance.new("UIStroke")
+	indicatorGlow.Color = indicator.BackgroundColor3
+	indicatorGlow.Thickness = 1
+	indicatorGlow.Transparency = 0.7
+	indicatorGlow.Parent = indicator
 	
-	-- Icon (emoji-based for simplicity, more compact)
+	-- Icon (UMBRELLA CORP: 22x22px medical alert style)
 	local icon = Instance.new("TextLabel")
-	icon.Size = UDim2.new(0, 16, 0, 16)  -- Reduced from 20x20
-	icon.Position = UDim2.new(0, 16, 0, 8)  -- Closer to edges
+	icon.Size = UDim2.new(0, 22, 0, 22)
+	icon.Position = UDim2.new(0, 18, 0, 10)
 	icon.BackgroundTransparency = 1
-	icon.Font = Enum.Font.GothamBold  -- Use bold for better icon visibility
-	icon.TextSize = 14  -- Reduced from 16
+	icon.Font = Enum.Font.GothamBold
+	icon.TextSize = 16
 	icon.TextColor3 = Colors.Text.Primary
 	icon.TextXAlignment = Enum.TextXAlignment.Center
 	icon.TextYAlignment = Enum.TextYAlignment.Center
 	icon.ZIndex = notification.ZIndex + 1
 	icon.Parent = notification
-	
+
 	if notificationType == "success" then
 		icon.Text = "✓"
 		icon.TextColor3 = Colors.Status.Success
@@ -139,53 +146,59 @@ local function createNotification(config)
 		icon.Text = "⚠"
 		icon.TextColor3 = Colors.Status.Warning
 	elseif notificationType == "error" then
-		icon.Text = "!"  -- Changed to exclamation mark for better visibility
-		icon.TextColor3 = Colors.Status.Error
-		icon.TextSize = 16  -- Slightly larger for error icon
+		icon.Text = "!"
+		icon.TextColor3 = Colors.Umbrella.Red
+		icon.TextSize = 18
 	else -- info
-		icon.Text = "i"  -- Changed to simple 'i' for info
-		icon.TextColor3 = Colors.Accent.Primary
+		icon.Text = "i"
+		icon.TextColor3 = Colors.Status.Info
 	end
 	
-	-- Content container (more compact)
+	-- Content container (UMBRELLA CORP: 14px padding from icon)
 	local contentContainer = Instance.new("Frame")
-	contentContainer.Size = UDim2.new(1, action and -80 or -50, 1, -8)  -- Reduced margins
-	contentContainer.Position = UDim2.new(0, 40, 0, 4)  -- Closer positioning
+	contentContainer.Size = UDim2.new(1, action and -90 or -60, 1, -14)
+	contentContainer.Position = UDim2.new(0, 46, 0, 7)
 	contentContainer.BackgroundTransparency = 1
 	contentContainer.ZIndex = notification.ZIndex + 1
 	contentContainer.Parent = notification
-	
-	-- Title (more compact)
+
+	-- Padding
+	local contentPadding = Instance.new("UIPadding")
+	contentPadding.PaddingLeft = UDim.new(0, 8)
+	contentPadding.PaddingRight = UDim.new(0, 8)
+	contentPadding.Parent = contentContainer
+
+	-- Title (UMBRELLA CORP: 14px Gotham Semibold)
 	local hasTitle = title and title ~= ""
 	local titleLabel = nil
 	if hasTitle then
 		titleLabel = Instance.new("TextLabel")
-		titleLabel.Size = UDim2.new(1, 0, 0, 16)  -- Reduced from 18
-		titleLabel.Position = UDim2.new(0, 0, 0, 1)  -- Reduced from 2
+		titleLabel.Size = UDim2.new(1, 0, 0, 18)
+		titleLabel.Position = UDim2.new(0, 0, 0, 2)
 		titleLabel.BackgroundTransparency = 1
 		titleLabel.Text = title
 		titleLabel.TextColor3 = Colors.Text.Primary
 		titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 		titleLabel.TextYAlignment = Enum.TextYAlignment.Top
 		titleLabel.Font = Enum.Font.GothamBold
-		titleLabel.TextSize = 13  -- Reduced from 14
+		titleLabel.TextSize = 14
 		titleLabel.TextTruncate = Enum.TextTruncate.AtEnd
 		titleLabel.ZIndex = contentContainer.ZIndex + 1
 		titleLabel.Parent = contentContainer
 	end
-	
-	-- Message (more compact)
+
+	-- Message (UMBRELLA CORP: 13px Gotham Regular)
 	if message and message ~= "" then
 		local messageLabel = Instance.new("TextLabel")
-		messageLabel.Size = UDim2.new(1, 0, hasTitle and 0, 14 or 1, 0)  -- Reduced from 16
-		messageLabel.Position = UDim2.new(0, 0, hasTitle and 0, 17 or 0, 0)  -- Reduced from 20
+		messageLabel.Size = UDim2.new(1, 0, hasTitle and 0, 16 or 1, 0)
+		messageLabel.Position = UDim2.new(0, 0, hasTitle and 0, 20 or 0, 0)
 		messageLabel.BackgroundTransparency = 1
 		messageLabel.Text = message
 		messageLabel.TextColor3 = Colors.Text.Secondary
 		messageLabel.TextXAlignment = Enum.TextXAlignment.Left
 		messageLabel.TextYAlignment = hasTitle and Enum.TextYAlignment.Top or Enum.TextYAlignment.Center
 		messageLabel.Font = Enum.Font.Gotham
-		messageLabel.TextSize = 11  -- Reduced from 12
+		messageLabel.TextSize = 13
 		messageLabel.TextWrapped = true
 		messageLabel.ZIndex = contentContainer.ZIndex + 1
 		messageLabel.Parent = contentContainer
