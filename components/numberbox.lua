@@ -76,14 +76,14 @@ function NumberBox:Create(config)
 		end
 	end
 	
-	-- Main numberbox container (UMBRELLA CORP: 34px height)
+	-- Main numberbox container
 	local numberBoxContainer = Instance.new("Frame")
 	if isForAccordion then
 		numberBoxContainer.Size = UDim2.new(1, -10, 0, 25)
 		-- Don't set Position for accordion numberboxes - let UIListLayout handle it
 		numberBoxContainer.ZIndex = 6
 	else
-		numberBoxContainer.Size = UDim2.new(1, -20, 0, 34)
+		numberBoxContainer.Size = UDim2.new(1, -20, 0, 30)
 		numberBoxContainer.Position = UDim2.new(0, 10, 0, currentY)
 		numberBoxContainer.ZIndex = 3
 		numberBoxContainer:SetAttribute("ComponentStartY", currentY)
@@ -92,80 +92,47 @@ function NumberBox:Create(config)
 	numberBoxContainer.ClipsDescendants = true -- Ensure text doesn't overflow container
 	numberBoxContainer.Parent = parentContainer
 	
-	-- Number input box (UMBRELLA CORP: 34px height, 14px text, Gotham, 6px corner)
+	-- Number input box
 	local numberBox = Instance.new("TextBox")
 	if isForAccordion then
 		numberBox.Size = UDim2.new(1, -45, 1, 0)
 		numberBox.TextSize = 12
 		numberBox.ZIndex = 7
 	else
-		numberBox.Size = UDim2.new(1, -36, 1, 0)
+		numberBox.Size = UDim2.new(1, -60, 1, 0)
 		numberBox.TextSize = 14
 		numberBox.ZIndex = 4
 	end
 	numberBox.Position = UDim2.new(0, 0, 0, 0)
 	numberBox.BackgroundColor3 = Colors.Input.Background
-	numberBox.BorderSizePixel = 0
+	numberBox.BorderColor3 = Colors.Input.Border
+	numberBox.BorderSizePixel = 1
 	numberBox.Text = decimals > 0 and string.format("%." .. decimals .. "f", defaultValue) or tostring(defaultValue)
 	numberBox.PlaceholderText = placeholder
 	numberBox.TextColor3 = Colors.Input.Text
 	numberBox.PlaceholderColor3 = Colors.Input.Placeholder
-	numberBox.Font = Enum.Font.Gotham
+	numberBox.Font = Enum.Font.SourceSans
 	numberBox.TextXAlignment = Enum.TextXAlignment.Center
 	numberBox.TextYAlignment = Enum.TextYAlignment.Center
 	numberBox.TextScaled = false -- Prevent text from scaling down automatically
 	numberBox.ClipsDescendants = true -- Clip text that overflows the TextBox
 	numberBox.ClearTextOnFocus = false
 	numberBox.Parent = numberBoxContainer
-
+	
 	-- Add padding to NumberBox
 	local padding = Instance.new("UIPadding")
-	padding.PaddingLeft = UDim.new(0, 12)
-	padding.PaddingRight = UDim.new(0, 12)
+	padding.PaddingLeft = UDim.new(0, 8)
+	padding.PaddingRight = UDim.new(0, 8)
 	padding.PaddingTop = UDim.new(0, 0)
 	padding.PaddingBottom = UDim.new(0, 0)
 	padding.Parent = numberBox
-
-	-- Round corners for number box (UMBRELLA CORP: 6px)
-	local numberCorner = Instance.new("UICorner")
-	numberCorner.CornerRadius = UDim.new(0, 6)
-	numberCorner.Parent = numberBox
-
-	-- Default border (gray, transparency 0.6)
-	local defaultBorder = Instance.new("UIStroke")
-	defaultBorder.Color = Colors.Input.Border
-	defaultBorder.Thickness = 1
-	defaultBorder.Transparency = 0.6
-	defaultBorder.Parent = numberBox
-
-	-- Red focus glow (UMBRELLA CORP: Umbrella Red, pulsing 0.7 ↔ 0.5, 1.5s Sine)
-	local focusGlow = Instance.new("UIStroke")
-	focusGlow.Name = "FocusGlow"
-	focusGlow.Color = Colors.Umbrella.Red
-	focusGlow.Thickness = 1
-	focusGlow.Transparency = 1
-	focusGlow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	focusGlow.Parent = numberBox
-
-	-- Pulsing glow animation (only when focused)
-	local isFocused = false
-	task.spawn(function()
-		local TweenService = game:GetService("TweenService")
-		while numberBox and numberBox.Parent do
-			if isFocused then
-				local fadeIn = TweenService:Create(focusGlow, TweenInfo.new(0.75, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.5})
-				local fadeOut = TweenService:Create(focusGlow, TweenInfo.new(0.75, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.7})
-				fadeIn:Play()
-				fadeIn.Completed:Wait()
-				fadeOut:Play()
-				fadeOut.Completed:Wait()
-			else
-				task.wait(0.1)
-			end
-		end
-	end)
 	
-	-- Increment button (up arrow) (UMBRELLA CORP: 28x18px, 4px corner)
+	-- Round corners for number box
+	local numberCorner = Instance.new("UICorner")
+	numberCorner.CornerRadius = UDim.new(0, 4)
+	numberCorner.Parent = numberBox
+	
+	-- Increment button (up arrow)
 	local incrementBtn = Instance.new("TextButton")
 	if isForAccordion then
 		incrementBtn.Size = UDim2.new(0, 20, 0, 12)
@@ -173,24 +140,20 @@ function NumberBox:Create(config)
 		incrementBtn.TextSize = 8
 		incrementBtn.ZIndex = 7
 	else
-		incrementBtn.Size = UDim2.new(0, 28, 0, 16)
-		incrementBtn.Position = UDim2.new(1, -32, 0, 1)
+		incrementBtn.Size = UDim2.new(0, 25, 0, 14)
+		incrementBtn.Position = UDim2.new(1, -30, 0, 1)
 		incrementBtn.TextSize = 10
 		incrementBtn.ZIndex = 4
 	end
 	incrementBtn.BackgroundColor3 = Colors.Surface.Default
-	incrementBtn.BorderSizePixel = 0
+	incrementBtn.BorderColor3 = Colors.Border.Default
+	incrementBtn.BorderSizePixel = 1
 	incrementBtn.Text = "▲"
 	incrementBtn.TextColor3 = Colors.Text.Secondary
-	incrementBtn.Font = Enum.Font.Gotham
+	incrementBtn.Font = Enum.Font.SourceSans
 	incrementBtn.Parent = numberBoxContainer
-
-	-- Corner for increment button
-	local incrementCorner = Instance.new("UICorner")
-	incrementCorner.CornerRadius = UDim.new(0, 4)
-	incrementCorner.Parent = incrementBtn
-
-	-- Decrement button (down arrow) (UMBRELLA CORP: 28x18px, 4px corner)
+	
+	-- Decrement button (down arrow)
 	local decrementBtn = Instance.new("TextButton")
 	if isForAccordion then
 		decrementBtn.Size = UDim2.new(0, 20, 0, 12)
@@ -198,22 +161,18 @@ function NumberBox:Create(config)
 		decrementBtn.TextSize = 8
 		decrementBtn.ZIndex = 7
 	else
-		decrementBtn.Size = UDim2.new(0, 28, 0, 16)
-		decrementBtn.Position = UDim2.new(1, -32, 0, 17)
+		decrementBtn.Size = UDim2.new(0, 25, 0, 14)
+		decrementBtn.Position = UDim2.new(1, -30, 0, 15)
 		decrementBtn.TextSize = 10
 		decrementBtn.ZIndex = 4
 	end
 	decrementBtn.BackgroundColor3 = Colors.Surface.Default
-	decrementBtn.BorderSizePixel = 0
+	decrementBtn.BorderColor3 = Colors.Border.Default
+	decrementBtn.BorderSizePixel = 1
 	decrementBtn.Text = "▼"
 	decrementBtn.TextColor3 = Colors.Text.Secondary
-	decrementBtn.Font = Enum.Font.Gotham
+	decrementBtn.Font = Enum.Font.SourceSans
 	decrementBtn.Parent = numberBoxContainer
-
-	-- Corner for decrement button
-	local decrementCorner = Instance.new("UICorner")
-	decrementCorner.CornerRadius = UDim.new(0, 4)
-	decrementCorner.Parent = decrementBtn
 	
 	-- Calculate heights based on whether we have a title label
 	local hasTitle = name and name ~= ""
@@ -338,76 +297,30 @@ function NumberBox:Create(config)
 		updateValue(currentValue - increment)
 	end)
 	
-	-- Button hover effects (UMBRELLA CORP: Red border on hover)
+	-- Button hover effects
 	incrementBtn.MouseEnter:Connect(function()
 		incrementBtn.BackgroundColor3 = Colors.Surface.Hover
-		-- Add red border on hover
-		local hoverBorder = incrementBtn:FindFirstChild("HoverBorder")
-		if not hoverBorder then
-			hoverBorder = Instance.new("UIStroke")
-			hoverBorder.Name = "HoverBorder"
-			hoverBorder.Color = Colors.Umbrella.Red
-			hoverBorder.Thickness = 1
-			hoverBorder.Transparency = 0.8
-			hoverBorder.Parent = incrementBtn
-		end
 	end)
-
+	
 	incrementBtn.MouseLeave:Connect(function()
 		incrementBtn.BackgroundColor3 = Colors.Surface.Default
-		local hoverBorder = incrementBtn:FindFirstChild("HoverBorder")
-		if hoverBorder then
-			hoverBorder:Destroy()
-		end
 	end)
-
+	
 	decrementBtn.MouseEnter:Connect(function()
 		decrementBtn.BackgroundColor3 = Colors.Surface.Hover
-		-- Add red border on hover
-		local hoverBorder = decrementBtn:FindFirstChild("HoverBorder")
-		if not hoverBorder then
-			hoverBorder = Instance.new("UIStroke")
-			hoverBorder.Name = "HoverBorder"
-			hoverBorder.Color = Colors.Umbrella.Red
-			hoverBorder.Thickness = 1
-			hoverBorder.Transparency = 0.8
-			hoverBorder.Parent = decrementBtn
-		end
 	end)
-
+	
 	decrementBtn.MouseLeave:Connect(function()
 		decrementBtn.BackgroundColor3 = Colors.Surface.Default
-		local hoverBorder = decrementBtn:FindFirstChild("HoverBorder")
-		if hoverBorder then
-			hoverBorder:Destroy()
-		end
 	end)
-
-	-- Focus effects (UMBRELLA CORP: Show red glow on focus, 0.15s Quad transition)
+	
+	-- Focus effects
 	numberBox.Focused:Connect(function()
-		isFocused = true
-		local TweenService = game:GetService("TweenService")
-		-- Hide default border, show focus glow
-		local borderTween = TweenService:Create(defaultBorder, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 1})
-		local glowTween = TweenService:Create(focusGlow, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 0.7})
-		-- Slightly lighter background on focus
-		local bgTween = TweenService:Create(numberBox, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundColor3 = Colors.Input.BackgroundFocus})
-		borderTween:Play()
-		glowTween:Play()
-		bgTween:Play()
+		numberBox.BorderColor3 = Colors.Input.BorderFocus
 	end)
-
+	
 	numberBox.FocusLost:Connect(function()
-		isFocused = false
-		local TweenService = game:GetService("TweenService")
-		-- Show default border, hide focus glow
-		local borderTween = TweenService:Create(defaultBorder, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 0.6})
-		local glowTween = TweenService:Create(focusGlow, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 1})
-		-- Reset background color
-		local bgTween = TweenService:Create(numberBox, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundColor3 = Colors.Input.Background})
-		borderTween:Play()
-		glowTween:Play()
-		bgTween:Play()
+		numberBox.BorderColor3 = Colors.Input.Border
 	end)
 	
 	-- Return NumberBox API
