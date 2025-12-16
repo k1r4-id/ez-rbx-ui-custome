@@ -145,8 +145,8 @@ function Button:Create(config)
 			button.BackgroundColor3 = variantColors.background
 		end)
 	else
-		-- UMBRELLA CORP: 30px height for better spacing (5px gap with +35 increment), 120px width, 16px padding, 6px corner, 14px text, Gotham Semibold
-		button.Size = UDim2.new(0, 120, 0, 30)
+		-- UMBRELLA CORP: 30px height for better spacing (5px gap with +35 increment), 150px width, 16px padding, 6px corner, 14px text, Gotham Semibold
+		button.Size = UDim2.new(0, 150, 0, 30)
 		button.Position = UDim2.new(0, 10, 0, currentY)
 		button.BorderSizePixel = 0
 		button.TextSize = 14
