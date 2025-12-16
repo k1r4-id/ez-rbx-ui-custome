@@ -458,7 +458,7 @@ function Tab:Create(config)
 			end
 			
 			-- Update currentY (reduced spacing)
-			currentY = maxY + 5
+			currentY = maxY + 2
 			
 			-- Use our unified canvas update function
 			updateTabCanvasSize()
@@ -470,7 +470,7 @@ function Tab:Create(config)
 		-- Update currentY for next component based on actual container size (reduced spacing)
 		task.wait() -- Ensure size is rendered
 		local actualHeight = accordionAPI.Container.AbsoluteSize.Y
-		currentY = currentY + actualHeight + 5
+		currentY = currentY + actualHeight + 2
 		updateTabCanvasSize()
 		
 		return accordionAPI
