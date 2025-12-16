@@ -93,14 +93,17 @@ function Window:CreateFloatingButton(screenGui, frame, toggleMinimizeCallback, a
 	-- No UICorner - we want just the icon without rounded border
 
 	-- Umbrella Corporation icon using ImageLabel
-	local arrowIcon = Instance.new("ImageLabel")
+    local arrowIcon = Instance.new("ImageLabel")
 	arrowIcon.Size = UDim2.new(1, 0, 1, 0)
-	arrowIcon.Position = UDim2.new(0, 0, 0, 0)
 	arrowIcon.BackgroundTransparency = 1
-	arrowIcon.Image = "rbxassetid://139068957088350" -- Umbrella Corporation logo
+	arrowIcon.Image = "rbxassetid://105703453649379"
 	arrowIcon.ScaleType = Enum.ScaleType.Fit
 	arrowIcon.ZIndex = 101
 	arrowIcon.Parent = floatingButton
+
+	local scale = Instance.new("UIScale")
+	scale.Scale = 1.4 
+	scale.Parent = arrowIcon
 	
 	-- Click detector for floating button
 	local floatingClickButton = Instance.new("TextButton")
