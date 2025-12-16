@@ -81,31 +81,24 @@ end
 function Window:CreateFloatingButton(screenGui, frame, toggleMinimizeCallback, autoShow)
 	-- Create floating button (visibility based on AutoShow parameter)
 	local floatingButton = Instance.new("Frame")
-	floatingButton.Size = UDim2.new(0, 50, 0, 50)
-	floatingButton.Position = UDim2.new(0, 0, 0.5, -25) -- Middle left by default
-	floatingButton.BackgroundColor3 = Colors.Background.Primary
+	floatingButton.Size = UDim2.new(0, 80, 0, 80)
+	floatingButton.Position = UDim2.new(0, 0, 0.5, -40) -- Middle left by default
+	floatingButton.BackgroundTransparency = 1 -- Transparent background, no circular border
 	floatingButton.BorderSizePixel = 0
 	floatingButton.ZIndex = 100
 	floatingButton.Visible = not autoShow -- Show floating button if window starts hidden
 	floatingButton.Active = true
 	floatingButton.Parent = screenGui
-	
-	-- Rounded corners for floating button - TUMPUL (consistent with main window)
-	local floatingCorner = Instance.new("UICorner")
-	floatingCorner.CornerRadius = UDim.new(0, 24) -- Lebih tumpul/rounded (updated to 24 for consistency)
-	floatingCorner.Parent = floatingButton
-	
-	-- Biohazard icon ☣
-	local arrowIcon = Instance.new("TextLabel")
+
+	-- No UICorner - we want just the icon without rounded border
+
+	-- Umbrella Corporation icon using ImageLabel
+	local arrowIcon = Instance.new("ImageLabel")
 	arrowIcon.Size = UDim2.new(1, 0, 1, 0)
 	arrowIcon.Position = UDim2.new(0, 0, 0, 0)
 	arrowIcon.BackgroundTransparency = 1
-	arrowIcon.Text = "☣" -- Biohazard icon
-	arrowIcon.TextColor3 = Colors.Text.Primary
-	arrowIcon.TextSize = 28
-	arrowIcon.Font = Enum.Font.SourceSansBold
-	arrowIcon.TextXAlignment = Enum.TextXAlignment.Center
-	arrowIcon.TextYAlignment = Enum.TextYAlignment.Center
+	arrowIcon.Image = "rbxassetid://139068957088350" -- Umbrella Corporation logo
+	arrowIcon.ScaleType = Enum.ScaleType.Fit
 	arrowIcon.ZIndex = 101
 	arrowIcon.Parent = floatingButton
 	
@@ -116,29 +109,16 @@ function Window:CreateFloatingButton(screenGui, frame, toggleMinimizeCallback, a
 	floatingClickButton.Text = ""
 	floatingClickButton.ZIndex = 102
 	floatingClickButton.Parent = floatingButton
-	
-	-- Shadow effect for floating button
-	local floatingShadow = Instance.new("Frame")
-	floatingShadow.Size = UDim2.new(1, 4, 1, 4)
-	floatingShadow.Position = UDim2.new(0, -2, 0, -2)
-	floatingShadow.BackgroundColor3 = Colors.Background.Overlay
-	floatingShadow.BackgroundTransparency = 0.8
-	floatingShadow.BorderSizePixel = 0
-	floatingShadow.ZIndex = 99
-	floatingShadow.Parent = floatingButton
-	
-	local shadowCorner = Instance.new("UICorner")
-	shadowCorner.CornerRadius = UDim.new(0, 24) -- Lebih tumpul/rounded (updated to 24 for consistency)
-	shadowCorner.Parent = floatingShadow
-	
-	-- Hover effects for floating button
-	local originalColor = Colors.Background.Primary
+
+	-- No shadow effect - clean icon only
+
+	-- Hover effects for icon (transparency change)
 	floatingClickButton.MouseEnter:Connect(function()
-		floatingButton.BackgroundColor3 = Colors.Background.Secondary
+		arrowIcon.ImageTransparency = 0.3
 	end)
-	
+
 	floatingClickButton.MouseLeave:Connect(function()
-		floatingButton.BackgroundColor3 = originalColor
+		arrowIcon.ImageTransparency = 0
 	end)
 	
 	-- Dragging functionality for floating button (FREE PLACEMENT - NO SNAP)
@@ -221,12 +201,12 @@ function Window:SetupMinimizeToggle(frame, floatingButton, originalPosition)
 			-- Minimize: hide window and show floating button
 			originalPosition = frame.Position
 			frame.Visible = false
-			
+
 			-- Show floating button with animation
 			floatingButton.Frame.Visible = true
-			floatingButton.Frame.Size = UDim2.new(0, 0, 0, 50)
+			floatingButton.Frame.Size = UDim2.new(0, 0, 0, 80)
 			floatingButton.Frame:TweenSize(
-				UDim2.new(0, 50, 0, 50),
+				UDim2.new(0, 80, 0, 80),
 				Enum.EasingDirection.Out,
 				Enum.EasingStyle.Quad,
 				0.3,
@@ -236,7 +216,7 @@ function Window:SetupMinimizeToggle(frame, floatingButton, originalPosition)
 		else
 			-- Restore: hide floating button and show window
 			floatingButton.Frame:TweenSize(
-				UDim2.new(0, 0, 0, 50),
+				UDim2.new(0, 0, 0, 80),
 				Enum.EasingDirection.In,
 				Enum.EasingStyle.Quad,
 				0.2,
