@@ -250,20 +250,31 @@ function Toggle:Create(config)
 		Toggle = toggleContainer
 	}
 
-	function toggleAPI:SetValue(newValue)
+	function toggleAPI:SetValue(newValue, triggerCallback)
 		if type(newValue) ~= "boolean" and newValue == isToggled then
 			return
 		end
 
 		isToggled = newValue
 		updateToggleAppearance()
-		
+
 		-- Save to configuration
 		if not flag then
 			return
 		end
-		
+
 		settings:SetValue(flag, isToggled)
+
+		-- Trigger callback if requested (default true for backward compatibility)
+		if triggerCallback ~= false then
+			local success, errorMsg = pcall(function()
+				callback(isToggled)
+			end)
+
+			if not success then
+				warn("Toggle SetValue callback error:", errorMsg)
+			end
+		end
 	end
 	
 	function toggleAPI:GetValue()
